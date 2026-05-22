@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Académie Thieulot — Mentorat d'Excellence, Paris 15e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #B8965A;
+    --gold-light: #D4B483;
+    --gold-pale: #F5EDD8;
+    --dark: #0E0E0C;
+    --dark-2: #1A1A16;
+    --dark-3: #252520;
+    --cream: #F7F3EC;
+    --cream-2: #EEE8DA;
+    --text: #2C2B26;
+    --text-muted: #6B6655;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--cream);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: rgba(14,14,12,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(184,150,90,0.2);
+  }
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: rgba(255,255,255,0.5); font-weight: 300; }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    transition: background 0.3s;
+  }
+  .nav-cta:hover { background: var(--gold-light); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: var(--dark);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 8rem 4rem 6rem 4rem;
+    position: relative; z-index: 2;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2.5rem; height: 1px;
+    background: var(--gold);
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: 4.5rem;
+    font-weight: 300;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 2rem;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .hero-sub {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    max-width: 400px;
+    margin-bottom: 3.5rem;
+    letter-spacing: 0.02em;
+  }
+  .hero-actions { display: flex; gap: 1.5rem; align-items: center; }
+  .btn-primary {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    padding: 1rem 2.5rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); }
+  .btn-ghost {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    text-decoration: none;
+    transition: color 0.3s;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 2px;
+  }
+  .btn-ghost:hover { color: var(--gold-light); border-color: var(--gold); }
+  .hero-right {
+    position: relative;
+    background: linear-gradient(135deg, #1a1a16 0%, #111 100%);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .hero-visual {
+    position: relative;
+    width: 380px; height: 500px;
+  }
+  .hero-card {
+    position: absolute;
+    background: var(--dark-3);
+    border: 1px solid rgba(184,150,90,0.25);
+    padding: 2rem;
+  }
+  .hero-card-main {
+    width: 280px; height: 360px;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .card-gold-line {
+    width: 2.5rem; height: 2px;
+    background: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .card-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.25;
+    margin: 0.75rem 0 1.5rem;
+  }
+  .card-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    font-weight: 300;
+    color: var(--gold-light);
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.4;
+    margin-top: 2px;
+  }
+  .hero-card-float {
+    position: absolute;
+    width: 160px;
+    background: var(--gold);
+    padding: 1.25rem;
+    top: 30px; right: -20px;
+  }
+  .float-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+    font-family: var(--sans);
+    margin-bottom: 0.4rem;
+  }
+  .float-val {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--dark);
+  }
+  .float-sub {
+    font-size: 0.65rem;
+    color: rgba(0,0,0,0.6);
+    font-family: var(--sans);
+    margin-top: 2px;
+  }
+  .hero-card-float2 {
+    position: absolute;
+    width: 150px;
+    background: var(--dark-2);
+    border: 1px solid rgba(184,150,90,0.3);
+    padding: 1.25rem;
+    bottom: 40px; left: -20px;
+  }
+  .hero-deco {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero-deco::before {
+    content: 'AT';
+    font-family: var(--serif);
+    font-size: 20rem;
+    font-weight: 300;
+    color: rgba(184,150,90,0.04);
+    position: absolute;
+    bottom: -2rem; right: -3rem;
+    line-height: 1;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 0;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--dark-2);
+    padding: 1.25rem 0;
+    overflow: hidden;
+    border-top: 1px solid rgba(184,150,90,0.15);
+    border-bottom: 1px solid rgba(184,150,90,0.15);
+  }
+  .marquee-track {
+    display: flex; gap: 3rem;
+    animation: marquee 25s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 1rem;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    flex-shrink: 0;
+  }
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--gold);
+    border-radius: 50%;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── SECTION HELPERS ── */
+  section { padding: 7rem 4rem; }
+  .section-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-weight: 400;
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 2rem; height: 1px;
+    background: var(--gold);
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 3.25rem;
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--dark);
+    margin-bottom: 1.5rem;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+  .section-body {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.85;
+    color: var(--text-muted);
+    max-width: 520px;
+  }
+
+  /* ── CONCEPT ── */
+  .concept {
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+  .concept-visual {
+    position: relative;
+    height: 520px;
+  }
+  .concept-block {
+    position: absolute;
+    padding: 2.5rem;
+  }
+  .cb-1 {
+    top: 0; left: 0;
+    width: 280px; height: 200px;
+    background: var(--dark);
+    border: 1px solid rgba(184,150,90,0.2);
+  }
+  .cb-2 {
+    bottom: 0; right: 0;
+    width: 260px; height: 200px;
+    background: var(--gold-pale);
+    border: 1px solid rgba(184,150,90,0.3);
+  }
+  .cb-3 {
+    top: 50%; left: 50%;
+    transform: translate(-30%, -50%);
+    width: 200px; height: 240px;
+    background: var(--gold);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    z-index: 2;
+  }
+  .cb-title {
+    font-family: var(--serif);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.3;
+  }
+  .cb-title.dark { color: var(--dark); }
+  .cb-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-family: var(--sans);
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+  }
+  .cb-label.dark { color: rgba(0,0,0,0.5); }
+  .cb-label.muted { color: var(--text-muted); }
+
+  /* ── OFFRE ── */
+  .offre-section {
+    background: var(--dark);
+    color: #fff;
+  }
+  .offre-section .section-title { color: #fff; }
+  .offre-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+    background: rgba(184,150,90,0.15);
+  }
+  .offre-card {
+    background: var(--dark-2);
+    padding: 3rem 2.5rem;
+    position: relative;
+    transition: background 0.3s;
+    cursor: default;
+  }
+  .offre-card:hover { background: var(--dark-3); }
+  .offre-card.featured {
+    background: var(--gold);
+  }
+  .offre-card.featured:hover { background: var(--gold-light); }
+  .offre-num {
+    font-family: var(--serif);
+    font-size: 4rem;
+    font-weight: 300;
+    color: rgba(184,150,90,0.2);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
+  .offre-card.featured .offre-num { color: rgba(0,0,0,0.15); }
+  .offre-name {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 0.75rem;
+  }
+  .offre-card.featured .offre-name { color: var(--dark); }
+  .offre-desc {
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+  .offre-card.featured .offre-desc { color: rgba(0,0,0,0.6); }
+  .offre-price {
+    font-family: var(--serif);
+    font-size: 2.25rem;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-bottom: 0.25rem;
+  }
+  .offre-card.featured .offre-price { color: var(--dark); }
+  .offre-unit {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--sans);
+    margin-bottom: 2rem;
+  }
+  .offre-card.featured .offre-unit { color: rgba(0,0,0,0.45); }
+  .offre-features {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+  .offre-features li {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.55);
+    padding-left: 1.25rem;
+    position: relative;
+    line-height: 1.5;
+  }
+  .offre-card.featured .offre-features li { color: rgba(0,0,0,0.65); }
+  .offre-features li::before {
+    content: '—';
+    position: absolute; left: 0;
+    color: var(--gold);
+  }
+  .offre-card.featured .offre-features li::before { color: rgba(0,0,0,0.4); }
+  .offre-badge {
+    position: absolute;
+    top: 1.5rem; right: 1.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: rgba(0,0,0,0.2);
+    color: rgba(0,0,0,0.6);
+    padding: 0.35rem 0.75rem;
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+
+  /* ── COMMENT ÇA MARCHE ── */
+  .process-section { background: var(--cream-2); }
+  .process-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+    margin-top: 4rem;
+  }
+  .process-step { position: relative; }
+  .process-step::after {
+    content: '';
+    position: absolute;
+    top: 1rem; right: -1.5rem;
+    width: 3rem; height: 1px;
+    background: linear-gradient(90deg, var(--gold-light), transparent);
+  }
+  .process-step:last-child::after { display: none; }
+  .step-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold-pale);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    -webkit-text-stroke: 1px var(--gold-light);
+    color: transparent;
+  }
+  .step-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--dark);
+    margin-bottom: 0.75rem;
+  }
+  .step-desc {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  /* ── RESERVATION ── */
+  .reservation-section {
+    background: var(--dark);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+  }
+  .resa-left {
+    padding: 7rem 4rem;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .resa-left .section-title { color: #fff; }
+  .resa-right {
+    background: var(--dark-2);
+    border-left: 1px solid rgba(184,150,90,0.15);
+    padding: 5rem 4rem;
+    display: flex; flex-direction: column; gap: 1.5rem;
+  }
+
+  /* Form */
+  .form-group {
+    display: flex; flex-direction: column; gap: 0.5rem;
+  }
+  .form-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+  .form-input, .form-select {
+    background: var(--dark-3);
+    border: 1px solid rgba(184,150,90,0.2);
+    color: #fff;
+    padding: 0.85rem 1.25rem;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    appearance: none;
+  }
+  .form-input:focus, .form-select:focus {
+    border-color: rgba(184,150,90,0.6);
+  }
+  .form-input::placeholder { color: rgba(255,255,255,0.2); }
+  .form-select option { background: var(--dark-3); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-submit {
+    font-family: var(--sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dark);
+    background: var(--gold);
+    border: none;
+    padding: 1.1rem 2rem;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+  .form-submit:hover { background: var(--gold-light); }
+
+  /* Calendar mini */
+  .cal-mini {
+    background: var(--dark-3);
+    border: 1px solid rgba(184,150,90,0.2);
+    padding: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .cal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1rem;
+  }
+  .cal-month {
+    font-family: var(--serif);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gold-light);
+  }
+  .cal-nav {
+    background: none; border: none;
+    color: rgba(255,255,255,0.4);
+    cursor: pointer; font-size: 1rem;
+    transition: color 0.2s;
+    padding: 0.25rem 0.5rem;
+  }
+  .cal-nav:hover { color: var(--gold); }
+  .cal-days {
+    display: grid; grid-template-columns: repeat(7, 1fr);
+    gap: 4px; text-align: center;
+  }
+  .cal-day-name {
+    font-size: 0.6rem;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0;
+    font-family: var(--sans);
+  }
+  .cal-day {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    padding: 0.5rem 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-radius: 2px;
+    font-family: var(--sans);
+    border: none;
+    background: none;
+  }
+  .cal-day:hover { color: var(--gold); }
+  .cal-day.available { color: rgba(255,255,255,0.75); }
+  .cal-day.available:hover {
+    background: rgba(184,150,90,0.15);
+    color: var(--gold-light);
+  }
+  .cal-day.selected {
+    background: var(--gold);
+    color: var(--dark);
+    font-weight: 500;
+  }
+  .cal-day.empty { pointer-events: none; color: transparent; }
+  .cal-day.past { opacity: 0.25; pointer-events: none; }
+  .session-slots {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .slot {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: var(--dark-3);
+    border: 1px solid rgba(184,150,90,0.15);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .slot:hover { border-color: rgba(184,150,90,0.5); }
+  .slot.chosen { border-color: var(--gold); background: rgba(184,150,90,0.1); }
+  .slot-time { font-size: 0.85rem; color: #fff; font-family: var(--sans); font-weight: 300; }
+  .slot-spots {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+  .slot-spots.few { color: #c0392b; }
+  .resa-section-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    font-family: var(--sans);
+    margin-bottom: 0.75rem;
+  }
+
+  /* ── TEMOIGNAGES ── */
+  .temoignages { background: var(--cream); }
+  .temo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+    background: rgba(184,150,90,0.12);
+  }
+  .temo-card {
+    background: var(--cream);
+    padding: 3rem 2.5rem;
+    position: relative;
+  }
+  .temo-card::before {
+    content: '\201C';
+    font-family: var(--serif);
+    font-size: 5rem;
+    color: var(--gold-pale);
+    position: absolute;
+    top: 1rem; left: 2rem;
+    line-height: 1;
+  }
+  .temo-text {
+    font-family: var(--serif);
+    font-size: 1.05rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--dark);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  .temo-author {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-family: var(--sans);
+    font-weight: 400;
+  }
+  .temo-role {
+    font-size: 0.65rem;
+    color: var(--gold);
+    font-family: var(--sans);
+    margin-top: 3px;
+    letter-spacing: 0.1em;
+  }
+  .temo-stars {
+    color: var(--gold);
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  /* ── CERTIFICAT ── */
+  .cert-section {
+    background: var(--gold-pale);
+    border-top: 1px solid rgba(184,150,90,0.3);
+    border-bottom: 1px solid rgba(184,150,90,0.3);
+  }
+  .cert-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .cert-card {
+    background: #fff;
+    border: 2px solid rgba(184,150,90,0.3);
+    padding: 3rem;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+  .cert-card::before {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: -8px; bottom: -8px;
+    border: 1px solid rgba(184,150,90,0.2);
+    pointer-events: none;
+  }
+  .cert-logo-line {
+    width: 3rem; height: 3px;
+    background: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .cert-title-sm {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    font-family: var(--sans);
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .cert-name {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 400;
+    color: var(--dark);
+    margin-bottom: 0.25rem;
+  }
+  .cert-sub-text {
+    font-family: var(--serif);
+    font-size: 0.9rem;
+    font-style: italic;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+  .cert-divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 1.5rem 0;
+  }
+  .cert-detail {
+    font-size: 0.78rem;
+    font-family: var(--sans);
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .cert-detail strong {
+    color: var(--dark);
+    font-weight: 500;
+  }
+  .cert-seal {
+    position: absolute;
+    bottom: 1.5rem; right: 2rem;
+    width: 70px; height: 70px;
+    border: 2px solid rgba(184,150,90,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .cert-seal-text {
+    font-family: var(--serif);
+    font-size: 0.6rem;
+    text-align: center;
+    color: var(--gold);
+    line-height: 1.3;
+    font-weight: 400;
+  }
+
+  /* ── CONTACT / FOOTER ── */
+  footer {
+    background: var(--dark);
+    padding: 5rem 4rem 3rem;
+    border-top: 1px solid rgba(184,150,90,0.15);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-brand {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--gold-light);
+    margin-bottom: 1rem;
+  }
+  .footer-tagline {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.7;
+    max-width: 260px;
+  }
+  .footer-col-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--sans);
+    font-weight: 400;
+    margin-bottom: 1.25rem;
+  }
+  .footer-links {
+    list-style: none;
+    display: flex; flex-direction: column; gap: 0.6rem;
+  }
+  .footer-links a {
+    font-size: 0.82rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    transition: color 0.2s;
+    font-family: var(--sans);
+  }
+  .footer-links a:hover { color: var(--gold-light); }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.2);
+    font-family: var(--sans);
+    font-weight: 300;
+  }
+  .footer-legal {
+    display: flex; gap: 2rem;
+  }
+  .footer-legal a {
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.2);
+    text-decoration: none;
+    font-family: var(--sans);
+    transition: color 0.2s;
+  }
+  .footer-legal a:hover { color: rgba(255,255,255,0.4); }
+
+  /* ── SUCCESS MSG ── */
+  .success-msg {
+    display: none;
+    background: rgba(184,150,90,0.15);
+    border: 1px solid rgba(184,150,90,0.4);
+    padding: 1.25rem 1.5rem;
+    margin-top: 1rem;
+  }
+  .success-msg p {
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+  }
+  .success-msg.show { display: block; }
+
+  /* ── OFFRES EXTRAS ── */
+  .offre-bloc-label {
+    display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; margin-top: 2.5rem;
+  }
+  .offre-lieu-tag {
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.4rem 1rem; font-family: var(--sans);
+  }
+  .studio-tag { background: rgba(184,150,90,0.18); color: var(--gold-light); border: 1px solid rgba(184,150,90,0.3); }
+  .domicile-tag { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.15); }
+  .offre-lieu-sub { font-size: 0.72rem; color: rgba(255,255,255,0.3); font-family: var(--sans); font-weight: 300; }
+  .offre-separateur {
+    display: flex; align-items: center; gap: 2rem; margin: 3.5rem 0 2rem;
+  }
+  .sep-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .sep-content { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; flex-shrink: 0; }
+  .offre-grid-solo { grid-template-columns: 1fr !important; max-width: 420px; }
+  .domicile-card { border-left: 3px solid rgba(255,255,255,0.15) !important; }
+  .credit-impot-badge {
+    background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+    border-left: 3px solid var(--gold); padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+  }
+  .ci-titre { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; font-family: var(--sans); font-weight: 500; }
+  .ci-detail { font-size: 0.78rem; color: rgba(255,255,255,0.45); font-weight: 300; line-height: 1.65; }
+  .ci-detail strong { color: var(--gold-light); font-weight: 500; }
+  .offre-cta-btn {
+    display: block; text-align: center; margin-top: 1.5rem;
+    font-size: 0.72rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase;
+    padding: 0.9rem; text-decoration: none; transition: all 0.3s;
+    color: var(--gold); border: 1px solid rgba(184,150,90,0.3);
+  }
+  .offre-cta-btn:hover { background: rgba(184,150,90,0.1); }
+  .featured-cta { color: var(--dark) !important; background: rgba(0,0,0,0.18) !important; border-color: rgba(0,0,0,0.1) !important; }
+  .featured-cta:hover { background: rgba(0,0,0,0.28) !important; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.25rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 2.75rem; }
+    .hero-right { display: none; }
+    .hero-left { padding: 7rem 1.5rem 5rem; }
+    section { padding: 5rem 1.5rem; }
+    .concept { grid-template-columns: 1fr; }
+    .concept-visual { height: 320px; }
+    .offre-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr 1fr; }
+    .reservation-section { grid-template-columns: 1fr; }
+    .resa-left, .resa-right { padding: 4rem 1.5rem; }
+    .temo-grid { grid-template-columns: 1fr; }
+    .cert-inner { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Académie <span>Thieulot</span></a>
+  <ul class="nav-links">
+    <li><a href="#concept">Notre approche</a></li>
+    <li><a href="#offres">Offres</a></li>
+    <li><a href="site_pronote.html" target="_blank">Réservation</a></li>
+    <li><a href="#certificat">Certification</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="site_pronote.html" target="_blank" class="nav-cta">Réserver une séance</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="accueil" style="padding:0;">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Paris 15e — Mentorat d'excellence</div>
+    <h1>L'étude<br>comme au <em>sommet</em><br>de votre art.</h1>
+    <p class="hero-sub">L'Académie Thieulot propose trois voies vers l'excellence : mentorat collectif au Studio, stages intensifs Maths pendant les vacances, et cours particuliers à domicile. Deux mentors de la Sorbonne, une exigence commune.</p>
+    <div class="hero-actions">
+      <a href="site_pronote.html" target="_blank" class="btn-primary">Réserver — 50 € / 2h</a>
+      <a href="#concept" class="btn-ghost">Découvrir l'approche</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-deco"></div>
+    <div class="hero-visual">
+      <div class="hero-card hero-card-main">
+        <div>
+          <div class="card-label">Session en cours</div>
+          <div class="card-title">Mathématiques<br>& Méthode</div>
+          <div class="card-stats">
+            <div class="stat-item">
+              <div class="stat-num">5</div>
+              <div class="stat-label">élèves<br>max / séance</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-num">2</div>
+              <div class="stat-label">mentors<br>Sorbonne</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-gold-line" style="margin-bottom:0;margin-top:auto;"></div>
+      </div>
+      <div class="hero-card hero-card-float">
+        <div class="float-label">Par séance</div>
+        <div class="float-val">50 €</div>
+        <div class="float-sub">2h d'encadrement réel</div>
+      </div>
+      <div class="hero-card hero-card-float2">
+        <div class="card-label">Label</div>
+        <div class="card-title" style="font-size:1rem; color:#fff;">Certificat<br>Académie Thieulot</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>Mentors issus de la Sorbonne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>5 élèves maximum par séance</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Certification Parcoursup</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Studio dédié, zéro distraction</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Méthode Sorbonne transmise</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Paiement sécurisé en ligne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Compte-rendu après chaque séance</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Mentors issus de la Sorbonne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>5 élèves maximum par séance</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Certification Parcoursup</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Studio dédié, zéro distraction</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Méthode Sorbonne transmise</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Paiement sécurisé en ligne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Compte-rendu après chaque séance</span>
+  </div>
+</div>
+
+<!-- CONCEPT -->
+<section class="concept" id="concept">
+  <div class="concept-visual reveal">
+    <div class="concept-block cb-1">
+      <div class="cb-label">L'existant</div>
+      <div class="cb-title">Garderie<br>ou passivité.</div>
+    </div>
+    <div class="concept-block cb-3">
+      <div class="cb-label dark">Notre approche</div>
+      <div class="cb-title dark" style="font-size:1.5rem;">Mentorat<br>de groupe<br>d'élite.</div>
+    </div>
+    <div class="concept-block cb-2">
+      <div class="cb-label muted">Résultat</div>
+      <div class="cb-title" style="color:var(--dark); font-size:1.1rem;">Autonomie.<br>Méthode.<br>Excellence.</div>
+    </div>
+  </div>
+  <div class="reveal" style="transition-delay:0.15s;">
+    <div class="section-eyebrow">Notre philosophie</div>
+    <h2 class="section-title">Une <em>troisième voie</em><br>entre la garderie et le cours particulier.</h2>
+    <p class="section-body">L'étude surveillée est trop bruyante, trop impersonnelle. Le cours particulier est trop passif, trop onéreux. L'Académie Thieulot occupe un espace unique : l'encadrement de groupe en contexte premium, où chaque élève est connu, suivi et challengé.</p>
+    <p class="section-body" style="margin-top:1.5rem;">Dans notre studio du 15e arrondissement, loin des salles de classe et des distractions, vos enfants travaillent en profondeur. Téléphones déposés à l'entrée. Questions répondues immédiatement. Devoirs vérifiés, compris, expliqués.</p>
+    <a href="#offres" class="btn-primary" style="margin-top:2.5rem; display:inline-block;">Voir nos formules</a>
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section class="offre-section" id="offres">
+  <div class="section-eyebrow" style="color:var(--gold);">Nos formules</div>
+  <h2 class="section-title reveal">Trois <em>piliers</em>,<br>une mission d'excellence.</h2>
+
+  <!-- BLOC 1 : AU STUDIO (collectif) -->
+  <div class="offre-bloc-label reveal">
+    <span class="offre-lieu-tag studio-tag">📍 Au Studio — Paris 15e</span>
+    <span class="offre-lieu-sub">70 Rue Sébastien Mercier · 5 élèves max · 2 mentors Sorbonne</span>
+  </div>
+  <div class="offre-grid reveal">
+    <div class="offre-card">
+      <div class="offre-num">01</div>
+      <div class="offre-name">Le Studio — Séance Soirée</div>
+      <div class="offre-desc">Sessions de mentorat collectif en soirée dans notre studio du 15e. Toutes matières, encadrement premium, ambiance de travail d'élite.</div>
+      <div class="offre-price">50 €</div>
+      <div class="offre-unit">Par séance — 2h · soit 25 €/h</div>
+      <ul class="offre-features">
+        <li>2 mentors Sorbonne présents</li>
+        <li>5 élèves maximum par séance</li>
+        <li>Toutes matières (maths, sciences, français…)</li>
+        <li>Téléphone déposé à l'entrée</li>
+        <li>Compte-rendu envoyé aux parents</li>
+        <li>Certificat de mentorat semestriel</li>
+      </ul>
+      <a href="site_pronote.html" target="_blank" class="offre-cta-btn">Réserver une séance →</a>
+    </div>
+    <div class="offre-card featured">
+      <div class="offre-badge">Recommandé</div>
+      <div class="offre-num">02</div>
+      <div class="offre-name">Stage Intensif Maths</div>
+      <div class="offre-desc">Stages thématiques 100% Mathématiques pendant les vacances scolaires. Idéal pour combler des lacunes, préparer le Bac ou viser l'excellence en concours.</div>
+      <div class="offre-price">250 €</div>
+      <div class="offre-unit">Stage de 10h — 5 jours × 2h · Focus Maths</div>
+      <ul class="offre-features">
+        <li>Programme 100% Mathématiques</li>
+        <li>Préparation DS, Bac, Concours</li>
+        <li>5 élèves maximum</li>
+        <li>Progression mesurable garantie</li>
+        <li>Bilan écrit remis aux parents</li>
+        <li>Certificat de stage inclus</li>
+      </ul>
+      <a href="site_pronote.html" target="_blank" class="offre-cta-btn featured-cta">Réserver un stage →</a>
+    </div>
+    <div class="offre-card">
+      <div class="offre-num">03</div>
+      <div class="offre-name">Pack Trimestriel Studio</div>
+      <div class="offre-desc">L'engagement sur la durée, clé de la vraie progression. Priorité de réservation et suivi mensuel personnalisé pour les familles qui visent l'excellence.</div>
+      <div class="offre-price">420 €</div>
+      <div class="offre-unit">10 séances Studio — soit 42 €/séance</div>
+      <ul class="offre-features">
+        <li>Tous les avantages Studio Soirée</li>
+        <li>Priorité de réservation des créneaux</li>
+        <li>Bilan mensuel par email aux parents</li>
+        <li>Accompagnement Parcoursup inclus</li>
+        <li>Attestation officielle Sorbonne</li>
+      </ul>
+      <a href="site_pronote.html" target="_blank" class="offre-cta-btn">Réserver le pack →</a>
+    </div>
+  </div>
+
+  <!-- SÉPARATEUR VISUEL Studio → Domicile -->
+  <div class="offre-separateur reveal">
+    <div class="sep-line"></div>
+    <div class="sep-content">
+      <span class="offre-lieu-tag domicile-tag">🏠 À Domicile — Chez l'élève</span>
+      <span class="offre-lieu-sub">Cours individuels · Crédit d'impôt 50% · Reste à charge : 30 €/h</span>
+    </div>
+    <div class="sep-line"></div>
+  </div>
+
+  <!-- BLOC 2 : COURS PARTICULIERS DOMICILE -->
+  <div class="offre-grid offre-grid-solo reveal">
+    <div class="offre-card domicile-card">
+      <div class="offre-num">04</div>
+      <div class="offre-name">Cours Particuliers Maths</div>
+      <div class="offre-desc">Cours individuels de Mathématiques directement chez l'élève. Bastien se déplace dans le 15e et arrondissements limitrophes pour un suivi 100% personnalisé.</div>
+      <div class="offre-price">60 €<span style="font-size:1.1rem;font-weight:300;color:rgba(255,255,255,0.4);"> /h</span></div>
+      <div class="offre-unit">Cours individuel à domicile · 1h ou 2h</div>
+      <ul class="offre-features">
+        <li>Cours 1-pour-1, chez vous</li>
+        <li>Spécialisation 100% Mathématiques</li>
+        <li>Préparation DS, Bac, Concours</li>
+        <li>Programme adapté à chaque élève</li>
+        <li>Compte-rendu après chaque séance</li>
+      </ul>
+      <div class="credit-impot-badge">
+        <div class="ci-titre">💡 Crédit d'impôt services à la personne</div>
+        <div class="ci-detail">50% remboursés par l'État (Art. 199 sexdecies CGI)<br>
+        <strong>Prix réel : 30 €/h</strong> après avantage fiscal · Attestation Cesu fournie automatiquement</div>
+      </div>
+      <a href="site_pronote.html" target="_blank" class="offre-cta-btn">Réserver un cours →</a>
+    </div>
+  </div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="process-section">
+  <div class="section-eyebrow">Comment ça marche</div>
+  <h2 class="section-title reveal">De la réservation<br>à la <em>sérénité familiale</em>.</h2>
+  <div class="process-grid">
+    <div class="process-step reveal" style="transition-delay:0s;">
+      <div class="step-num">01</div>
+      <div class="step-title">Réservez en ligne</div>
+      <div class="step-desc">Choisissez un créneau disponible sur notre calendrier, payez en ligne en toute sécurité. La place est confirmée immédiatement.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.1s;">
+      <div class="step-num">02</div>
+      <div class="step-title">La séance au Studio</div>
+      <div class="step-desc">Votre enfant dépose son téléphone, ouvre ses cahiers et travaille en profondeur. Les deux mentors répondent à chaque question en temps réel.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.2s;">
+      <div class="step-num">03</div>
+      <div class="step-title">Compte-rendu parents</div>
+      <div class="step-desc">À la fin de chaque séance, vous recevez un bref rapport : ce qui a été traité, les points à surveiller, les prochaines étapes.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.3s;">
+      <div class="step-num">04</div>
+      <div class="step-title">Valorisation du dossier</div>
+      <div class="step-desc">À chaque semestre, votre enfant reçoit son certificat de mentorat Académie Thieulot, valorisable directement dans Parcoursup.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation-section" id="reservation" style="padding:0;">
+  <div class="resa-left">
+    <div class="section-eyebrow" style="color:var(--gold);">Réservation</div>
+    <h2 class="section-title reveal">Réservez votre <em>séance</em> dès maintenant.</h2>
+    <p class="section-body" style="color:rgba(255,255,255,0.45); margin-top:1rem;">Les créneaux sont limités à 5 élèves. Le paiement préalable en ligne garantit votre place et l'engagement de chacun.</p>
+    <div style="margin-top:3rem; display:flex; flex-direction:column; gap:1.5rem;">
+      <div>
+        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Adresse du studio</div>
+        <div style="font-size:0.9rem;color:rgba(255,255,255,0.55);font-weight:300;font-family:var(--sans);">70 Rue Sébastien Mercier<br>75015 Paris<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Métro Javel – André Citroën (L10)</span></div>
+      </div>
+      <div>
+        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Politique d'annulation</div>
+        <div style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:300;font-family:var(--sans);line-height:1.6;">Annulation gratuite jusqu'à 48h avant la séance. Les téléphones sont déposés à l'entrée du studio.</div>
+      </div>
+      <div>
+        <div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Cours à domicile</div>
+        <div style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:300;font-family:var(--sans);line-height:1.6;">Pour les cours particuliers à domicile, le crédit d'impôt services à la personne s'applique : 50% remboursés, soit <strong style="color:rgba(255,255,255,0.6);">30 €/h réels</strong>. Une attestation Cesu vous est fournie.</div>
+      </div>
+    </div>
+  </div>
+  <div class="resa-right">
+    <div class="resa-section-title">1. Choisissez une date</div>
+    <div class="cal-mini">
+      <div class="cal-header">
+        <button class="cal-nav" id="prev-month">&#8592;</button>
+        <div class="cal-month" id="cal-title">Juin 2025</div>
+        <button class="cal-nav" id="next-month">&#8594;</button>
+      </div>
+      <div class="cal-days" id="cal-grid">
+        <div class="cal-day-name">Lu</div>
+        <div class="cal-day-name">Ma</div>
+        <div class="cal-day-name">Me</div>
+        <div class="cal-day-name">Je</div>
+        <div class="cal-day-name">Ve</div>
+        <div class="cal-day-name">Sa</div>
+        <div class="cal-day-name">Di</div>
+      </div>
+    </div>
+    <div class="resa-section-title">2. Sélectionnez un créneau</div>
+    <div class="session-slots" id="slots">
+      <div class="slot" data-slot="0" onclick="selectSlot(0)">
+        <span class="slot-time">Lundi — 17h00 à 19h00</span>
+        <span class="slot-spots">3 places restantes</span>
+      </div>
+      <div class="slot" data-slot="1" onclick="selectSlot(1)">
+        <span class="slot-time">Mercredi — 14h00 à 16h00</span>
+        <span class="slot-spots">4 places restantes</span>
+      </div>
+      <div class="slot" data-slot="2" onclick="selectSlot(2)">
+        <span class="slot-time">Mercredi — 17h00 à 19h00</span>
+        <span class="slot-spots few">1 place restante</span>
+      </div>
+      <div class="slot" data-slot="3" onclick="selectSlot(3)">
+        <span class="slot-time">Vendredi — 17h00 à 19h00</span>
+        <span class="slot-spots">5 places restantes</span>
+      </div>
+    </div>
+    <div class="resa-section-title" style="margin-top:0.5rem;">3. Vos informations</div>
+    <div class="form-group">
+      <label class="form-label">Prénom et nom de l'élève</label>
+      <input type="text" class="form-input" id="student-name" placeholder="Ex : Léa Martin">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Classe</label>
+        <select class="form-select" id="classe">
+          <option value="">—</option>
+          <option>6ème</option><option>5ème</option><option>4ème</option>
+          <option>3ème</option><option>2nde</option><option>1ère</option>
+          <option>Terminale</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type de prestation</label>
+        <select class="form-select" id="formule" onchange="updateCreneaux()">
+          <option value="">— Choisir —</option>
+          <optgroup label="📍 Au Studio (Paris 15e)">
+            <option value="studio-seance">Studio Soirée — 50 €/séance (2h)</option>
+            <option value="studio-stage">Stage Intensif Maths — 250 € (10h vacances)</option>
+            <option value="studio-pack">Pack Trimestriel — 420 € (10 séances)</option>
+          </optgroup>
+          <optgroup label="🏠 À Domicile (chez l'élève)">
+            <option value="domicile">Cours Particuliers Maths — 60 €/h (crédit impôt : 30 €/h)</option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email des parents</label>
+      <input type="email" class="form-input" id="parent-email" placeholder="prenom.nom@email.com">
+    </div>
+    <button class="form-submit" onclick="submitForm()">Confirmer et payer →</button>
+    <div class="success-msg" id="success-msg">
+      <p>✦ Réservation prise en compte. Vous recevrez un e-mail de confirmation dans les prochaines minutes avec le lien de paiement sécurisé. Bienvenue à l'Académie Thieulot.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TEMOIGNAGES -->
+<section class="temoignages">
+  <div class="section-eyebrow">Témoignages</div>
+  <h2 class="section-title reveal">Ce que disent<br>les <em>familles</em>.</h2>
+  <div class="temo-grid reveal">
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">En deux mois, notre fils est passé de 11 à 15 en maths. Mais ce qui nous a le plus touché, c'est qu'il revenait du Studio en ayant envie de travailler. Une première.</p>
+      <div class="temo-author">Isabelle D.</div>
+      <div class="temo-role">Mère d'un élève de Première — Paris 15e</div>
+    </div>
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">Le compte-rendu que nous recevons après chaque séance est précieux. On sait exactement ce qui a été fait, ce qui pose encore problème. La transparence est totale.</p>
+      <div class="temo-author">Marc & Sophie L.</div>
+      <div class="temo-role">Parents d'une élève de Terminale — Paris 16e</div>
+    </div>
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">Le certificat de mentorat a été un vrai argument dans son dossier Parcoursup. Les examinateurs ont noté l'engagement extrascolaire. Elle a été admise en classe préparatoire.</p>
+      <div class="temo-author">Famille Schneider</div>
+      <div class="temo-role">Parents d'une ancienne élève — Paris 15e</div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICAT -->
+<section class="cert-section" id="certificat">
+  <div class="cert-inner">
+    <div>
+      <div class="section-eyebrow">Le Label Académie Thieulot</div>
+      <h2 class="section-title reveal">Un certificat reconnu,<br>un dossier <em>renforcé</em>.</h2>
+      <p class="section-body">À chaque semestre, vos élèves assidus reçoivent une attestation officielle de mentorat, valorisable dans leur dossier Parcoursup à la rubrique "Activités et centres d'intérêt".</p>
+      <p class="section-body" style="margin-top:1rem;">Ce document certifie les compétences méthodologiques acquises, le volume horaire travaillé, et l'encadrement par des mentors Sorbonne. Un signal fort envoyé aux examinateurs du supérieur.</p>
+    </div>
+    <div class="cert-card reveal" style="transition-delay:0.2s;">
+      <div class="cert-logo-line"></div>
+      <div class="cert-title-sm">Académie Thieulot — Attestation officielle</div>
+      <div class="cert-name">Emma Rousseau</div>
+      <div class="cert-sub-text">Élève en classe de Terminale, Lycée Camille Sée</div>
+      <div class="cert-divider"></div>
+      <div class="cert-detail">
+        <p>A suivi avec assiduité un programme de <strong>mentorat sélectif</strong> d'une durée de <strong>40 heures</strong> au cours du premier semestre de l'année 2024–2025.</p>
+        <p style="margin-top:0.75rem;">Compétences certifiées : <strong>organisation, rigueur de rédaction, gestion du temps, mémorisation active</strong>.</p>
+        <p style="margin-top:0.75rem; color:var(--gold); font-family:var(--serif); font-style:italic;">Mentors : Bastien Thieulot & Emma, L3 Mathématiques & Géologie — La Sorbonne, Paris</p>
+      </div>
+      <div class="cert-seal">
+        <div class="cert-seal-text">Mentorat<br>Sorbonne<br>★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Académie Thieulot</div>
+      <div class="footer-tagline">L'étude de luxe encadrée. Deux mentors de la Sorbonne, cinq élèves, un studio, un résultat.</div>
+      <div style="margin-top:1.5rem; display:flex; flex-direction:column; gap:0.5rem;">
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.35); font-family:var(--sans); font-weight:300;">bastien.thieulot@academie-thieulot.fr</div>
+        <div style="font-size:0.78rem; color:rgba(255,255,255,0.35); font-family:var(--sans); font-weight:300;">70 Rue Sébastien Mercier, 75015 Paris</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#concept">Notre approche</a></li>
+        <li><a href="#offres">Formules</a></li>
+        <li><a href="site_pronote.html" target="_blank">Réservation</a></li>
+        <li><a href="#certificat">Certification</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">À propos</div>
+      <ul class="footer-links">
+        <li><a href="#">Bastien Thieulot</a></li>
+        <li><a href="#">Notre pédagogie</a></li>
+        <li><a href="#">Le Studio</a></li>
+        <li><a href="#">Réseau Alumni</a></li>
+        <li><a href="#">Parcoursup & nous</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Établissements partenaires</div>
+      <ul class="footer-links">
+        <li><a href="#">Lycée Camille Sée</a></li>
+        <li><a href="#">École Jeannine Manuel</a></li>
+        <li><a href="#">Cité Scolaire Buffon</a></li>
+        <li><a href="#">Lycée Blomet</a></li>
+        <li><a href="#">Collège André Citroën</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Académie Thieulot — Tous droits réservés</div>
+    <div class="footer-legal">
+      <a href="#">Mentions légales</a>
+      <a href="#">Politique de confidentialité</a>
+      <a href="#">CGV</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── CALENDRIER ──
+  const months = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+  const today = new Date();
+  let viewYear = today.getFullYear();
+  let viewMonth = today.getMonth();
+  let selectedDay = null;
+
+  const availableDays = { 1: true, 3: true, 5: true }; // Mon, Wed, Fri
+
+  function buildCal() {
+    const grid = document.getElementById('cal-grid');
+    document.getElementById('cal-title').textContent = months[viewMonth] + ' ' + viewYear;
+    while (grid.children.length > 7) grid.removeChild(grid.lastChild);
+
+    const first = new Date(viewYear, viewMonth, 1).getDay();
+    const offset = (first === 0) ? 6 : first - 1;
+    const total = new Date(viewYear, viewMonth + 1, 0).getDate();
+
+    for (let i = 0; i < offset; i++) {
+      const el = document.createElement('button');
+      el.className = 'cal-day empty';
+      el.textContent = '';
+      grid.appendChild(el);
+    }
+    for (let d = 1; d <= total; d++) {
+      const el = document.createElement('button');
+      el.className = 'cal-day';
+      el.textContent = d;
+      const date = new Date(viewYear, viewMonth, d);
+      const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const dow = date.getDay();
+      if (isPast) {
+        el.classList.add('past');
+      } else if (availableDays[dow]) {
+        el.classList.add('available');
+        el.addEventListener('click', () => selectDay(d, el));
+      }
+      if (selectedDay === d && viewYear === today.getFullYear() && viewMonth === today.getMonth()) {
+        el.classList.add('selected');
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function selectDay(d, el) {
+    selectedDay = d;
+    document.querySelectorAll('.cal-day.selected').forEach(e => e.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  document.getElementById('prev-month').addEventListener('click', () => {
+    viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; }
+    buildCal();
+  });
+  document.getElementById('next-month').addEventListener('click', () => {
+    viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; }
+    buildCal();
+  });
+
+  buildCal();
+
+  // ── CRÉNEAUX — mis à jour selon le type de prestation ──
+  let selectedSlot = null;
+
+  const SLOTS_STUDIO = [
+    { label: 'Lundi — 17h00 à 19h00', spots: '3 places restantes', few: false },
+    { label: 'Mercredi — 14h00 à 16h00', spots: '4 places restantes', few: false },
+    { label: 'Mercredi — 17h00 à 19h00', spots: '1 place restante', few: true },
+    { label: 'Vendredi — 17h00 à 19h00', spots: '5 places restantes', few: false },
+  ];
+  const SLOTS_DOMICILE = [
+    { label: 'À convenir ensemble — Matin (9h-12h)', spots: 'Disponible', few: false },
+    { label: 'À convenir ensemble — Après-midi (14h-18h)', spots: 'Disponible', few: false },
+    { label: 'À convenir ensemble — Soirée (18h-20h)', spots: 'Disponible', few: false },
+  ];
+
+  function renderSlots(slots) {
+    const container = document.getElementById('slots');
+    container.innerHTML = '';
+    selectedSlot = null;
+    slots.forEach((s, i) => {
+      const div = document.createElement('div');
+      div.className = 'slot';
+      div.dataset.slot = i;
+      div.innerHTML = `<span class="slot-time">${s.label}</span><span class="slot-spots${s.few ? ' few' : ''}">${s.spots}</span>`;
+      div.addEventListener('click', () => selectSlot(i));
+      container.appendChild(div);
+    });
+  }
+
+  function updateCreneaux() {
+    const formule = document.getElementById('formule').value;
+    if (formule === 'domicile') {
+      renderSlots(SLOTS_DOMICILE);
+    } else {
+      renderSlots(SLOTS_STUDIO);
+    }
+  }
+
+  // Initialiser avec les créneaux studio
+  renderSlots(SLOTS_STUDIO);
+
+  function selectSlot(i) {
+    selectedSlot = i;
+    document.querySelectorAll('.slot').forEach((s, idx) => {
+      s.classList.toggle('chosen', idx === i);
+    });
+  }
+
+  // ── FORM SUBMIT ──
+  function submitForm() {
+    const name = document.getElementById('student-name').value.trim();
+    const email = document.getElementById('parent-email').value.trim();
+    const classe = document.getElementById('classe').value;
+    const formule = document.getElementById('formule').value;
+    if (!name || !email || !classe || !formule || selectedSlot === null) {
+      alert('Merci de remplir tous les champs et de sélectionner un créneau.');
+      return;
+    }
+    const msg = document.getElementById('success-msg');
+    msg.classList.add('show');
+    msg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(() => window.open('site_pronote.html', '_blank'), 1500);
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

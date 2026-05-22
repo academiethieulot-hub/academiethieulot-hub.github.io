@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Académie Thieulot — Plateforme</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#B8965A;--gold-light:#D4B483;--gold-pale:#F5EDD8;--gold-dim:rgba(184,150,90,0.15);
+  --dark:#0E0E0C;--dark-2:#1A1A16;--dark-3:#252520;--dark-4:#2f2f28;
+  --cream:#F7F3EC;--cream-2:#EEE8DA;
+  --text:#2C2B26;--text-muted:#6B6655;
+  --green:#2d6a4f;--green-light:#52b788;
+  --red:#9b2226;--red-light:#e07070;
+  --blue:#1a3a5c;--blue-light:#5b9bd5;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',sans-serif;
+  --sidebar:260px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--dark);color:#fff;overflow-x:hidden;min-height:100vh;}
+
+/* ═══════════════════════════════
+   PAGES — show/hide
+═══════════════════════════════ */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ═══════════════════════════════
+   PAGE LOGIN
+═══════════════════════════════ */
+.login-page{
+  display:grid;grid-template-columns:1fr 1fr;min-height:100vh;
+}
+.login-left{
+  background:var(--dark-2);
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:3rem;position:relative;overflow:hidden;
+}
+.login-left::before{
+  content:'AT';font-family:var(--serif);font-size:22rem;font-weight:300;
+  color:rgba(184,150,90,0.04);position:absolute;bottom:-4rem;left:-3rem;
+  line-height:1;pointer-events:none;
+}
+.login-brand{font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--gold-light);letter-spacing:0.05em;}
+.login-brand span{color:rgba(255,255,255,0.35);font-weight:300;}
+.login-hero-text{position:relative;z-index:1;}
+.login-hero-text h2{font-family:var(--serif);font-size:3.5rem;font-weight:300;color:#fff;line-height:1.1;margin-bottom:1.25rem;}
+.login-hero-text h2 em{font-style:italic;color:var(--gold-light);}
+.login-hero-text p{font-size:0.88rem;font-weight:300;color:rgba(255,255,255,0.4);line-height:1.8;max-width:360px;}
+.login-stats{display:flex;gap:2.5rem;position:relative;z-index:1;}
+.ls-item{}
+.ls-num{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--gold-light);}
+.ls-label{font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:2px;}
+
+.login-right{
+  background:var(--dark);
+  display:flex;align-items:center;justify-content:center;
+  padding:3rem;
+}
+.login-box{width:100%;max-width:440px;}
+.login-title{font-family:var(--serif);font-size:2.25rem;font-weight:400;color:#fff;margin-bottom:0.4rem;}
+.login-subtitle{font-size:0.8rem;color:rgba(255,255,255,0.35);font-weight:300;margin-bottom:2.5rem;}
+
+/* Tabs */
+.role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:2rem;background:var(--dark-3);}
+.role-tab{
+  padding:0.85rem;text-align:center;font-size:0.72rem;font-weight:500;
+  letter-spacing:0.15em;text-transform:uppercase;cursor:pointer;
+  background:var(--dark-3);color:rgba(255,255,255,0.35);
+  border:none;transition:all 0.25s;
+}
+.role-tab.active{background:var(--gold);color:var(--dark);}
+
+/* Auth tabs */
+.auth-tabs{display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid rgba(255,255,255,0.08);}
+.auth-tab{
+  padding:0.6rem 1.25rem;font-size:0.75rem;font-weight:400;letter-spacing:0.1em;
+  cursor:pointer;background:none;border:none;color:rgba(255,255,255,0.35);
+  border-bottom:2px solid transparent;transition:all 0.25s;margin-bottom:-1px;
+}
+.auth-tab.active{color:var(--gold-light);border-bottom-color:var(--gold);}
+
+/* Form */
+.f-group{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
+.f-label{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.f-input{
+  background:var(--dark-3);border:1px solid rgba(184,150,90,0.18);
+  color:#fff;padding:0.82rem 1.1rem;font-family:var(--sans);font-size:0.9rem;font-weight:300;
+  outline:none;transition:border-color 0.3s;width:100%;
+}
+.f-input:focus{border-color:rgba(184,150,90,0.55);}
+.f-input::placeholder{color:rgba(255,255,255,0.18);}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;}
+.f-hint{font-size:0.7rem;color:rgba(255,255,255,0.22);line-height:1.5;margin-bottom:1rem;}
+.f-submit{
+  width:100%;padding:1rem;font-size:0.75rem;font-weight:500;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--dark);background:var(--gold);border:none;cursor:pointer;
+  transition:background 0.3s;margin-top:0.5rem;
+}
+.f-submit:hover{background:var(--gold-light);}
+.f-forgot{font-size:0.72rem;color:rgba(255,255,255,0.3);text-align:right;cursor:pointer;margin-bottom:1rem;transition:color 0.2s;}
+.f-forgot:hover{color:var(--gold-light);}
+.login-demo-btns{display:flex;flex-direction:column;gap:0.5rem;margin-top:1.75rem;}
+.demo-sep{text-align:center;font-size:0.65rem;letter-spacing:0.15em;color:rgba(255,255,255,0.2);text-transform:uppercase;margin-bottom:0.25rem;}
+.demo-btn{
+  padding:0.6rem;font-size:0.68rem;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;
+  border:1px solid rgba(184,150,90,0.2);background:none;color:rgba(255,255,255,0.4);cursor:pointer;
+  transition:all 0.2s;
+}
+.demo-btn:hover{border-color:var(--gold);color:var(--gold-light);}
+
+/* ═══════════════════════════════
+   LAYOUT DASHBOARD
+═══════════════════════════════ */
+.dash-layout{display:flex;min-height:100vh;}
+
+/* Sidebar */
+.sidebar{
+  width:var(--sidebar);flex-shrink:0;
+  background:var(--dark-2);border-right:1px solid rgba(184,150,90,0.12);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;z-index:50;
+  overflow-y:auto;
+}
+.sb-brand{
+  padding:1.75rem 1.5rem;border-bottom:1px solid rgba(184,150,90,0.1);
+  font-family:var(--serif);font-size:1.1rem;font-weight:400;color:var(--gold-light);
+}
+.sb-brand span{color:rgba(255,255,255,0.3);font-weight:300;}
+.sb-user{
+  padding:1.25rem 1.5rem;border-bottom:1px solid rgba(184,150,90,0.08);
+  display:flex;align-items:center;gap:0.85rem;
+}
+.sb-avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--gold);display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:1rem;font-weight:500;color:var(--dark);flex-shrink:0;
+}
+.sb-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;}
+.sb-user-info{}
+.sb-user-name{font-size:0.82rem;font-weight:500;color:#fff;line-height:1.2;}
+.sb-user-role{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-top:1px;}
+.sb-nav{flex:1;padding:1rem 0;}
+.sb-section{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.2);padding:0.75rem 1.5rem 0.4rem;}
+.sb-link{
+  display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;
+  font-size:0.78rem;font-weight:400;color:rgba(255,255,255,0.45);
+  cursor:pointer;transition:all 0.2s;border-left:2px solid transparent;
+  text-decoration:none;
+}
+.sb-link:hover,.sb-link.active{color:var(--gold-light);background:rgba(184,150,90,0.06);border-left-color:var(--gold);}
+.sb-icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0;}
+.sb-badge{margin-left:auto;background:var(--gold);color:var(--dark);font-size:0.58rem;font-weight:600;padding:0.15rem 0.45rem;border-radius:20px;}
+.sb-footer{padding:1.25rem 1.5rem;border-top:1px solid rgba(184,150,90,0.08);}
+.sb-logout{font-size:0.7rem;color:rgba(255,255,255,0.25);cursor:pointer;transition:color 0.2s;background:none;border:none;padding:0;font-family:var(--sans);}
+.sb-logout:hover{color:var(--red-light);}
+
+/* Main content */
+.dash-main{margin-left:var(--sidebar);flex:1;min-height:100vh;background:var(--dark);}
+.dash-topbar{
+  padding:1.25rem 2.5rem;border-bottom:1px solid rgba(184,150,90,0.1);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;background:rgba(14,14,12,0.95);backdrop-filter:blur(8px);z-index:30;
+}
+.topbar-title{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#fff;}
+.topbar-date{font-size:0.72rem;color:rgba(255,255,255,0.3);letter-spacing:0.1em;}
+.topbar-actions{display:flex;gap:0.75rem;}
+.tb-btn{
+  padding:0.55rem 1.25rem;font-size:0.68rem;font-weight:500;letter-spacing:0.12em;
+  text-transform:uppercase;cursor:pointer;transition:all 0.2s;border:none;font-family:var(--sans);
+}
+.tb-btn-primary{background:var(--gold);color:var(--dark);}
+.tb-btn-primary:hover{background:var(--gold-light);}
+.tb-btn-ghost{background:rgba(184,150,90,0.1);color:var(--gold-light);border:1px solid rgba(184,150,90,0.25);}
+.tb-btn-ghost:hover{background:rgba(184,150,90,0.18);}
+
+.dash-content{padding:2.5rem;}
+
+/* ═══════════════════════════════
+   COMPOSANTS COMMUNS
+═══════════════════════════════ */
+.dash-section-title{
+  font-family:var(--serif);font-size:1.2rem;font-weight:400;color:#fff;
+  margin-bottom:1.25rem;display:flex;align-items:center;gap:0.75rem;
+}
+.dst-line{width:2rem;height:1px;background:var(--gold);}
+.dash-grid{display:grid;gap:1.25rem;}
+.grid-2{grid-template-columns:1fr 1fr;}
+.grid-3{grid-template-columns:1fr 1fr 1fr;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+
+/* Cards */
+.card{
+  background:var(--dark-2);border:1px solid rgba(184,150,90,0.1);padding:1.75rem;
+}
+.card-sm{padding:1.25rem;}
+.card-gold{border-left:3px solid var(--gold);}
+.card-green{border-left:3px solid var(--green-light);}
+.card-red{border-left:3px solid var(--red-light);}
+.card-blue{border-left:3px solid var(--blue-light);}
+
+/* KPI cards */
+.kpi-label{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;}
+.kpi-value{font-family:var(--serif);font-size:2.25rem;font-weight:300;color:var(--gold-light);line-height:1;}
+.kpi-sub{font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:0.35rem;}
+.kpi-delta{font-size:0.68rem;font-weight:500;margin-top:0.25rem;}
+.kpi-delta.up{color:var(--green-light);}
+.kpi-delta.down{color:var(--red-light);}
+
+/* Status badges */
+.badge{display:inline-flex;align-items:center;gap:0.35rem;font-size:0.62rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.3rem 0.7rem;border-radius:0;}
+.badge-present{background:rgba(82,183,136,0.15);color:var(--green-light);border:1px solid rgba(82,183,136,0.25);}
+.badge-absent{background:rgba(224,112,112,0.12);color:var(--red-light);border:1px solid rgba(224,112,112,0.2);}
+.badge-pending{background:rgba(184,150,90,0.12);color:var(--gold-light);border:1px solid rgba(184,150,90,0.25);}
+.badge-paid{background:rgba(82,183,136,0.12);color:var(--green-light);border:1px solid rgba(82,183,136,0.2);}
+.badge-studio{background:rgba(184,150,90,0.12);color:var(--gold-light);}
+.badge-domicile{background:rgba(91,155,213,0.12);color:var(--blue-light);}
+
+/* Table */
+.dash-table{width:100%;border-collapse:collapse;}
+.dash-table th{
+  font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;
+  color:rgba(255,255,255,0.28);padding:0.65rem 1rem;text-align:left;
+  border-bottom:1px solid rgba(184,150,90,0.1);font-weight:400;
+}
+.dash-table td{
+  padding:0.9rem 1rem;font-size:0.82rem;color:rgba(255,255,255,0.7);
+  border-bottom:1px solid rgba(255,255,255,0.04);font-weight:300;
+  vertical-align:middle;
+}
+.dash-table tr:last-child td{border-bottom:none;}
+.dash-table tr:hover td{background:rgba(184,150,90,0.03);}
+
+/* Avatar small */
+.av-sm{
+  width:32px;height:32px;border-radius:50%;background:var(--dark-3);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:0.8rem;color:var(--gold-light);
+  border:1px solid rgba(184,150,90,0.2);flex-shrink:0;
+}
+.av-row{display:flex;align-items:center;gap:0.65rem;}
+.av-name{font-weight:400;color:#fff;}
+.av-class{font-size:0.68rem;color:rgba(255,255,255,0.3);}
+
+/* Validate btn */
+.btn-validate{
+  padding:0.35rem 0.85rem;font-size:0.62rem;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;border:none;cursor:pointer;transition:all 0.2s;font-family:var(--sans);
+}
+.btn-v-ok{background:rgba(82,183,136,0.15);color:var(--green-light);border:1px solid rgba(82,183,136,0.25);}
+.btn-v-ok:hover{background:rgba(82,183,136,0.25);}
+.btn-v-done{background:transparent;color:var(--green-light);border:1px solid rgba(82,183,136,0.15);cursor:default;}
+
+/* Timeline / agenda */
+.agenda-list{display:flex;flex-direction:column;gap:0;}
+.agenda-item{
+  display:grid;grid-template-columns:80px 1fr auto;
+  gap:1.25rem;align-items:center;padding:1rem 1.25rem;
+  border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.2s;
+}
+.agenda-item:hover{background:rgba(184,150,90,0.03);}
+.agenda-item:last-child{border-bottom:none;}
+.ag-time{font-family:var(--serif);font-size:1.1rem;color:var(--gold-light);font-weight:300;}
+.ag-time-sub{font-size:0.62rem;color:rgba(255,255,255,0.25);margin-top:1px;}
+.ag-info{}
+.ag-name{font-size:0.88rem;font-weight:400;color:#fff;}
+.ag-detail{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:2px;}
+.ag-actions{display:flex;gap:0.5rem;align-items:center;}
+
+/* Finance */
+.finance-row{
+  display:grid;grid-template-columns:1fr 1fr 1fr auto;
+  gap:1rem;align-items:center;padding:0.85rem 1.25rem;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.finance-row:hover{background:rgba(184,150,90,0.025);}
+.finance-row:last-child{border-bottom:none;}
+.fi-desc{font-size:0.82rem;color:#fff;font-weight:300;}
+.fi-sub{font-size:0.68rem;color:rgba(255,255,255,0.3);margin-top:2px;}
+.fi-amount{font-family:var(--serif);font-size:1.15rem;font-weight:300;color:var(--green-light);}
+.fi-amount.debit{color:var(--red-light);}
+.fi-date{font-size:0.72rem;color:rgba(255,255,255,0.3);}
+
+/* Progress bar */
+.prog-bar-wrap{background:rgba(255,255,255,0.06);height:4px;width:100%;margin-top:0.5rem;}
+.prog-bar{height:4px;background:linear-gradient(90deg,var(--gold),var(--gold-light));}
+
+/* Sections élève */
+.seance-card{
+  display:grid;grid-template-columns:60px 1fr auto;gap:1.25rem;
+  align-items:center;padding:1.25rem 1.5rem;
+  border:1px solid rgba(184,150,90,0.12);background:var(--dark-2);
+  transition:border-color 0.2s;margin-bottom:0.5rem;
+}
+.seance-card:hover{border-color:rgba(184,150,90,0.3);}
+.sc-date-block{text-align:center;}
+.sc-day{font-family:var(--serif);font-size:1.8rem;font-weight:300;color:var(--gold-light);line-height:1;}
+.sc-month{font-size:0.6rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.sc-info{}
+.sc-title{font-size:0.88rem;font-weight:400;color:#fff;}
+.sc-detail{font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:3px;}
+.sc-action{}
+.sc-btn{
+  padding:0.45rem 1rem;font-size:0.65rem;font-weight:500;letter-spacing:0.1em;
+  text-transform:uppercase;border:1px solid rgba(184,150,90,0.3);background:none;
+  color:var(--gold);cursor:pointer;transition:all 0.2s;font-family:var(--sans);
+}
+.sc-btn:hover{background:rgba(184,150,90,0.1);}
+
+/* Ressources */
+.ressource-card{
+  display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;
+  background:var(--dark-2);border:1px solid rgba(184,150,90,0.1);
+  transition:all 0.2s;cursor:pointer;
+}
+.ressource-card:hover{border-color:rgba(184,150,90,0.3);background:var(--dark-3);}
+.rc-icon{
+  width:40px;height:40px;background:rgba(184,150,90,0.1);
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;
+}
+.rc-info{flex:1;}
+.rc-title{font-size:0.85rem;font-weight:400;color:#fff;}
+.rc-meta{font-size:0.68rem;color:rgba(255,255,255,0.3);margin-top:2px;}
+.rc-arrow{color:rgba(255,255,255,0.2);font-size:0.9rem;transition:color 0.2s;}
+.ressource-card:hover .rc-arrow{color:var(--gold);}
+
+/* Note card élève */
+.note-item{display:flex;align-items:center;gap:1rem;padding:0.75rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.note-item:last-child{border-bottom:none;}
+.note-matiere{font-size:0.7rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);width:80px;flex-shrink:0;}
+.note-val{font-family:var(--serif);font-size:1.5rem;font-weight:300;color:#fff;width:60px;}
+.note-prog{flex:1;}
+.note-evol{font-size:0.7rem;color:var(--green-light);margin-left:0.5rem;}
+.note-evol.down{color:var(--red-light);}
+
+/* Notif dot */
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);display:inline-block;}
+
+/* Conseil tech box */
+.conseil-box{
+  background:var(--dark-2);border:1px solid rgba(184,150,90,0.2);
+  border-left:3px solid var(--gold);padding:1.75rem;margin-top:1.5rem;
+}
+.conseil-title{font-family:var(--serif);font-size:1.1rem;color:var(--gold-light);margin-bottom:1rem;}
+.conseil-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(184,150,90,0.1);margin:1rem 0;}
+.tech-option{background:var(--dark-3);padding:1.25rem;}
+.tech-name{font-size:0.82rem;font-weight:500;color:#fff;margin-bottom:0.35rem;}
+.tech-rec{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;}
+.tech-desc{font-size:0.75rem;color:rgba(255,255,255,0.4);line-height:1.6;}
+.tech-option.recommended{background:rgba(184,150,90,0.08);border:1px solid rgba(184,150,90,0.2);}
+
+/* Toast notification */
+.toast{
+  position:fixed;bottom:2rem;right:2rem;z-index:1000;
+  background:var(--dark-2);border:1px solid rgba(184,150,90,0.3);border-left:3px solid var(--gold);
+  padding:1rem 1.5rem;min-width:280px;
+  transform:translateY(100px);opacity:0;transition:all 0.35s ease;
+  pointer-events:none;
+}
+.toast.show{transform:translateY(0);opacity:1;pointer-events:all;}
+.toast-title{font-size:0.8rem;font-weight:500;color:var(--gold-light);margin-bottom:0.2rem;}
+.toast-msg{font-size:0.75rem;color:rgba(255,255,255,0.4);font-weight:300;}
+
+/* Scroll */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(184,150,90,0.2);border-radius:2px;}
+
+/* Responsive basics */
+@media(max-width:900px){
+  .login-page{grid-template-columns:1fr;}
+  .login-left{display:none;}
+  .sidebar{width:220px;}
+  .dash-main{margin-left:220px;}
+  .grid-3,.grid-4{grid-template-columns:1fr 1fr;}
+  .grid-2{grid-template-columns:1fr;}
+  .conseil-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .sidebar{display:none;}
+  .dash-main{margin-left:0;}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}
+  .dash-content{padding:1.5rem;}
+  .dash-topbar{padding:1rem 1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     TOAST
+══════════════════════════════════════ -->
+<div class="toast" id="toast">
+  <div class="toast-title" id="toast-title">Notification</div>
+  <div class="toast-msg" id="toast-msg">Message</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     PAGE 1 — LOGIN
+══════════════════════════════════════ -->
+<div class="page active" id="page-login">
+<div class="login-page">
+
+  <!-- Left decorative -->
+  <div class="login-left">
+    <div class="login-brand">Académie <span>Thieulot</span></div>
+    <div class="login-hero-text">
+      <h2>Votre espace<br>de <em>travail</em><br>personnel.</h2>
+      <p>Accédez à votre agenda, vos ressources pédagogiques, votre suivi de progression et votre certification Parcoursup — en un seul endroit.</p>
+    </div>
+    <div class="login-stats">
+      <div class="ls-item"><div class="ls-num">5</div><div class="ls-label">Élèves max / séance</div></div>
+      <div class="ls-item"><div class="ls-num">2</div><div class="ls-label">Mentors Sorbonne</div></div>
+      <div class="ls-item"><div class="ls-num">3</div><div class="ls-label">Offres disponibles</div></div>
+    </div>
+  </div>
+
+  <!-- Right form -->
+  <div class="login-right">
+    <div class="login-box">
+      <div class="login-title">Connexion</div>
+      <div class="login-subtitle">Accédez à votre espace personnel Académie Thieulot</div>
+
+      <!-- Role selector -->
+      <div class="role-tabs">
+        <button class="role-tab active" onclick="setRole('eleve', this)">👨‍🎓 Je suis élève</button>
+        <button class="role-tab" onclick="setRole('mentor', this)">🎓 Je suis mentor</button>
+      </div>
+
+      <!-- Auth mode tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="setAuthMode('login', this)">Se connecter</button>
+        <button class="auth-tab" onclick="setAuthMode('register', this)">Créer un compte</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div id="form-login">
+        <div class="f-group">
+          <label class="f-label">Adresse email</label>
+          <input type="email" id="login-email" class="f-input" placeholder="prenom.nom@email.com">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Mot de passe</label>
+          <input type="password" id="login-mdp" class="f-input" placeholder="••••••••">
+        </div>
+        <div class="f-forgot">Mot de passe oublié ?</div>
+        <button class="f-submit" id="login-btn" onclick="doLogin()">Se connecter →</button>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div id="form-register" style="display:none;">
+        <div class="f-row">
+          <div class="f-group">
+            <label class="f-label">Prénom</label>
+            <input type="text" id="reg-prenom" class="f-input" placeholder="Léa">
+          </div>
+          <div class="f-group">
+            <label class="f-label">Nom</label>
+            <input type="text" id="reg-nom" class="f-input" placeholder="Martin">
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Email</label>
+          <input type="email" id="reg-email" class="f-input" placeholder="prenom.nom@email.com">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Téléphone</label>
+          <input type="tel" id="reg-tel" class="f-input" placeholder="06 XX XX XX XX">
+        </div>
+        <div class="f-group" id="classe-group">
+          <label class="f-label">Classe</label>
+          <select class="f-input">
+            <option value="">Choisir votre classe…</option>
+            <option>6ème</option><option>5ème</option><option>4ème</option>
+            <option>3ème</option><option>2nde</option><option>1ère</option><option>Terminale</option>
+          </select>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Mot de passe</label>
+          <input type="password" id="reg-mdp" class="f-input" placeholder="8 caractères minimum">
+        </div>
+        <div class="f-hint">En créant un compte, vous acceptez nos Conditions Générales et notre Politique de Confidentialité.</div>
+        <button class="f-submit" onclick="doRegister()">Créer mon compte →</button>
+      </div>
+
+      <!-- Démos rapides -->
+      <div class="login-demo-btns">
+        <div class="demo-sep">— Démo rapide —</div>
+        <button class="demo-btn" onclick="loginAs('mentor')">🎓 Accéder au Dashboard Mentor</button>
+        <button class="demo-btn" onclick="loginAs('eleve')">👨‍🎓 Accéder au Dashboard Élève</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /page-login -->
+
+<!-- ══════════════════════════════════════
+     PAGE 2 — DASHBOARD MENTOR
+══════════════════════════════════════ -->
+<div class="page" id="page-mentor">
+<div class="dash-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">Académie <span>Thieulot</span></div>
+    <div class="sb-user">
+      <div class="sb-avatar">BT</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">Bastien Thieulot</div>
+        <div class="sb-user-role">Mentor principal</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <a class="sb-link active" onclick="mentorTab('agenda')"><span class="sb-icon">📅</span>Agenda du jour</a>
+      <a class="sb-link" onclick="mentorTab('eleves')"><span class="sb-icon">👥</span>Mes élèves<span class="sb-badge">8</span></a>
+      <a class="sb-link" onclick="mentorTab('finances')"><span class="sb-icon">💰</span>Comptabilité</a>
+      <div class="sb-section">Outils</div>
+      <a class="sb-link" onclick="mentorTab('ressources')"><span class="sb-icon">📚</span>Ressources PDF</a>
+      <a class="sb-link" onclick="mentorTab('certificats')"><span class="sb-icon">🏆</span>Certificats</a>
+      <a class="sb-link" onclick="mentorTab('parametres')"><span class="sb-icon">⚙️</span>Paramètres</a>
+    </nav>
+    <div class="sb-footer">
+      <button class="sb-logout" onclick="goToLogin()">← Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <div>
+        <div class="topbar-title" id="mentor-page-title">Agenda du jour</div>
+        <div class="topbar-date" id="mentor-date-display"></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="tb-btn tb-btn-ghost" onclick="showToast('Export', 'Export PDF en cours de génération…')">⬇ Exporter</button>
+        <button class="tb-btn tb-btn-primary" onclick="showToast('Séance créée', 'Nouvelle séance ajoutée à l\'agenda.')">+ Ajouter séance</button>
+      </div>
+    </div>
+
+    <div class="dash-content" id="mentor-content">
+      <!-- Contenu injecté par JS -->
+    </div>
+  </main>
+
+</div>
+</div><!-- /page-mentor -->
+
+<!-- ══════════════════════════════════════
+     PAGE 3 — DASHBOARD ÉLÈVE
+══════════════════════════════════════ -->
+<div class="page" id="page-eleve">
+<div class="dash-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-brand">Académie <span>Thieulot</span></div>
+    <div class="sb-user">
+      <div class="sb-avatar" style="background:var(--dark-3);color:var(--gold-light);border:1px solid rgba(184,150,90,0.3);">LM</div>
+      <div class="sb-user-info">
+        <div class="sb-user-name">Léa Martin</div>
+        <div class="sb-user-role">Élève · Terminale</div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Mon espace</div>
+      <a class="sb-link active" onclick="eleveTab('accueil')"><span class="sb-icon">🏠</span>Tableau de bord</a>
+      <a class="sb-link" onclick="eleveTab('seances')"><span class="sb-icon">📅</span>Mes séances<span class="sb-badge">2</span></a>
+      <a class="sb-link" onclick="eleveTab('ressources')"><span class="sb-icon">📚</span>Ressources Maths</a>
+      <a class="sb-link" onclick="eleveTab('progression')"><span class="sb-icon">📈</span>Ma progression</a>
+      <a class="sb-link" onclick="eleveTab('certificat')"><span class="sb-icon">🏆</span>Mon certificat</a>
+      <div class="sb-section">Réservation</div>
+      <a class="sb-link" onclick="eleveTab('reserver')"><span class="sb-icon">➕</span>Réserver une séance</a>
+    </nav>
+    <div class="sb-footer">
+      <button class="sb-logout" onclick="goToLogin()">← Déconnexion</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <div>
+        <div class="topbar-title" id="eleve-page-title">Tableau de bord</div>
+        <div class="topbar-date" id="eleve-date-display"></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="tb-btn tb-btn-primary" onclick="eleveTab('reserver')">+ Réserver une séance</button>
+      </div>
+    </div>
+    <div class="dash-content" id="eleve-content">
+    </div>
+  </main>
+
+</div>
+</div><!-- /page-eleve -->
+
+<script>
+window.onload = function() {
+
+/* ════════════════════════════════════════
+   SUPABASE
+════════════════════════════════════════ */
+const SUPABASE_URL = 'https://ffaihjqapaeivdeydhqw.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZmYWloanFhcGFlaXZkZXlkaHF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg0Mjc0NjEsImV4cCI6MjA5NDAwMzQ2MX0.V9frS2SLa8XMvrjKFfM_mZEjej2s_e437_1S9QoPfXQ';
+const sbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+/* ════════════════════════════════════════
+   ÉTAT GLOBAL
+════════════════════════════════════════ */
+let currentRole = 'eleve';
+let currentAuthMode = 'login';
+
+/* ════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function loginAs(role) {
+  if (role === 'mentor') { showPage('page-mentor'); mentorTab('agenda'); }
+  else                   { showPage('page-eleve');  eleveTab('accueil'); }
+}
+
+/* ════════════════════════════════════════
+   FORMULAIRE AUTH
+════════════════════════════════════════ */
+function setRole(role, btn) {
+  currentRole = role;
+  document.querySelectorAll('.role-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('classe-group').style.display = role === 'eleve' ? 'flex' : 'none';
+}
+function setAuthMode(mode, btn) {
+  currentAuthMode = mode;
+  document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('form-login').style.display    = mode === 'login'    ? 'block' : 'none';
+  document.getElementById('form-register').style.display = mode === 'register' ? 'block' : 'none';
+}
+
+/* ════════════════════════════════════════
+   LOGIN
+════════════════════════════════════════ */
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const mdp   = document.getElementById('login-mdp').value;
+  if (!email || !mdp) { alert('Merci de remplir email et mot de passe.'); return; }
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Connexion…'; btn.disabled = true;
+  const { data, error } = await sbClient.auth.signInWithPassword({ email, password: mdp });
+  btn.textContent = 'Se connecter →'; btn.disabled = false;
+  if (error) { alert('Email ou mot de passe incorrect.'); return; }
+  const { data: profile } = await sbClient.from('profiles').select('role').eq('id', data.user.id).single();
+  loginAs(profile ? profile.role : currentRole);
+}
+
+/* ════════════════════════════════════════
+   INSCRIPTION
+════════════════════════════════════════ */
+async function doRegister() {
+  const prenom = document.getElementById('reg-prenom').value.trim();
+  const nom    = document.getElementById('reg-nom').value.trim();
+  const email  = document.getElementById('reg-email').value.trim();
+  const mdp    = document.getElementById('reg-mdp').value;
+  if (!prenom || !nom || !email || !mdp) { alert('Merci de remplir tous les champs.'); return; }
+  if (mdp.length < 6) { alert('Le mot de passe doit faire au moins 6 caractères.'); return; }
+  const { error } = await sbClient.auth.signUp({
+    email, password: mdp,
+    options: { data: { prenom, nom, role: currentRole } }
+  });
+  if (error) { alert(error.message); return; }
+  alert('Compte créé ! Vérifiez votre email pour confirmer, puis connectez-vous.');
+  document.querySelector('.auth-tab').click();
+}
+
+/* ════════════════════════════════════════
+   DÉCONNEXION
+════════════════════════════════════════ */
+async function goToLogin() {
+  await sbClient.auth.signOut();
+  showPage('page-login');
+}
+
+/* ════════════════════════════════════════
+   SESSION ACTIVE AU CHARGEMENT
+════════════════════════════════════════ */
+sbClient.auth.getSession().then(({ data: { session } }) => {
+  if (session) {
+    sbClient.from('profiles').select('role').eq('id', session.user.id).single()
+      .then(({ data }) => { if (data) loginAs(data.role); });
+  }
+});
+
+/* ════════════════════════════════════════
+   DASHBOARDS (inchangé)
+════════════════════════════════════════ */
+// ═══════════════════════════════════════════════════
+//   DATES
+// ═══════════════════════════════════════════════════
+const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+const MONTHS_FR = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+function formatDate() {
+  const d = new Date();
+  return `${DAYS[d.getDay()]} ${d.getDate()} ${MONTHS_FR[d.getMonth()]} ${d.getFullYear()}`;
+}
+function initMentorDate() { document.getElementById('mentor-date-display').textContent = formatDate(); }
+function initEleveDate() { document.getElementById('eleve-date-display').textContent = formatDate(); }
+
+// ═══════════════════════════════════════════════════
+//   TOAST
+// ═══════════════════════════════════════════════════
+let toastTimer;
+function showToast(title, msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toast-title').textContent = title;
+  document.getElementById('toast-msg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════════════════════════
+//   DONNÉES DÉMO
+// ═══════════════════════════════════════════════════
+const ELEVES = [
+  { initials:'LM', name:'Léa Martin', class:'Terminale', formule:'Pack Trimestriel', seances:7, total:10, status:'present', paid:true },
+  { initials:'TN', name:'Thomas Nguyen', class:'1ère', formule:'Studio Soirée', seances:1, total:1, status:'present', paid:true },
+  { initials:'CR', name:'Camille Robert', class:'2nde', formule:'Studio Soirée', seances:1, total:1, status:'pending', paid:false },
+  { initials:'AB', name:'Antoine Blanc', class:'3ème', formule:'Pack Trimestriel', seances:3, total:10, status:'present', paid:true },
+  { initials:'SL', name:'Sofia Lopez', class:'Terminale', formule:'Cours domicile', seances:2, total:2, status:'absent', paid:true },
+];
+const TRANSACTIONS = [
+  { desc:'Pack Trimestriel — Léa Martin', date:'28 mai 2025', amount:420, status:'paid' },
+  { desc:'Studio Soirée — Thomas Nguyen', date:'26 mai 2025', amount:50, status:'paid' },
+  { desc:'Cours Domicile × 2h — Sofia Lopez', date:'24 mai 2025', amount:120, status:'paid' },
+  { desc:'Pack Trimestriel — Antoine Blanc', date:'15 mai 2025', amount:420, status:'paid' },
+  { desc:'Studio Soirée — Camille Robert', date:'—', amount:50, status:'pending' },
+];
+const AGENDA_TODAY = [
+  { time:'17h00', dur:'2h', students:['Léa Martin','Thomas Nguyen','Camille Robert','Antoine Blanc'], lieu:'Studio — 15e', type:'studio', validated:[false,false,false,false] },
+];
+const AGENDA_WEEK = [
+  { day:'Lundi 12', time:'17h00', slots:3, total:5, type:'studio' },
+  { day:'Mercredi 14', time:'14h00', slots:4, total:5, type:'studio' },
+  { day:'Mercredi 14', time:'17h00', slots:1, total:5, type:'studio' },
+  { day:'Vendredi 16', time:'17h00', slots:5, total:5, type:'studio' },
+  { day:'Samedi 17', time:'10h00', slots:1, total:1, type:'domicile', student:'Sofia Lopez', adresse:'Paris 16e' },
+];
+
+// ═══════════════════════════════════════════════════
+//   MENTOR TABS
+// ═══════════════════════════════════════════════════
+let presentMap = {};
+
+function mentorTab(tab) {
+  document.querySelectorAll('#page-mentor .sb-link').forEach(l => l.classList.remove('active'));
+  const links = document.querySelectorAll('#page-mentor .sb-link');
+  const tabMap = { agenda:0, eleves:1, finances:2, ressources:3, certificats:4, parametres:5 };
+  if (links[tabMap[tab]]) links[tabMap[tab]].classList.add('active');
+
+  const titles = { agenda:'Agenda du jour', eleves:'Mes élèves', finances:'Comptabilité', ressources:'Ressources PDF', certificats:'Certificats', parametres:'Paramètres' };
+  document.getElementById('mentor-page-title').textContent = titles[tab] || tab;
+
+  const c = document.getElementById('mentor-content');
+  if (tab === 'agenda') c.innerHTML = renderMentorAgenda();
+  else if (tab === 'eleves') c.innerHTML = renderMentorEleves();
+  else if (tab === 'finances') c.innerHTML = renderMentorFinances();
+  else if (tab === 'ressources') c.innerHTML = renderMentorRessources();
+  else if (tab === 'certificats') c.innerHTML = renderMentorCertificats();
+  else if (tab === 'parametres') c.innerHTML = renderParametres();
+}
+
+function renderMentorAgenda() {
+  const kpis = `
+  <div class="dash-grid grid-4" style="margin-bottom:1.75rem;">
+    <div class="card card-gold card-sm">
+      <div class="kpi-label">Séances aujourd'hui</div>
+      <div class="kpi-value">1</div>
+      <div class="kpi-sub">17h00 → 19h00</div>
+    </div>
+    <div class="card card-green card-sm">
+      <div class="kpi-label">Élèves attendus</div>
+      <div class="kpi-value">4</div>
+      <div class="kpi-sub">Studio — Paris 15e</div>
+    </div>
+    <div class="card card-blue card-sm">
+      <div class="kpi-label">CA du jour</div>
+      <div class="kpi-value">200 €</div>
+      <div class="kpi-sub">4 × 50 € Studio</div>
+    </div>
+    <div class="card card-red card-sm">
+      <div class="kpi-label">Paiements en attente</div>
+      <div class="kpi-value">50 €</div>
+      <div class="kpi-sub">Camille Robert</div>
+    </div>
+  </div>`;
+
+  const students = AGENDA_TODAY[0].students.map((s, i) => {
+    const init = s.split(' ').map(w=>w[0]).join('');
+    const isOk = presentMap[i];
+    return `
+    <div class="agenda-item">
+      <div>
+        <div class="ag-time">17h00</div>
+        <div class="ag-time-sub">→ 19h00</div>
+      </div>
+      <div class="ag-info">
+        <div class="av-row">
+          <div class="av-sm">${init}</div>
+          <div>
+            <div class="av-name">${s}</div>
+            <div class="av-class">Studio — Paris 15e · ${['Terminale','1ère','2nde','3ème'][i]}</div>
+          </div>
+        </div>
+      </div>
+      <div class="ag-actions">
+        ${isOk
+          ? `<button class="btn-validate btn-v-done">✓ Présent</button>`
+          : `<button class="btn-validate btn-v-ok" onclick="validatePresence(${i})">Valider présence</button>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+
+  const week = AGENDA_WEEK.map(s => `
+    <tr>
+      <td><strong style="color:#fff">${s.day}</strong></td>
+      <td>${s.time}</td>
+      <td>${s.type === 'domicile' ? s.student : s.slots + ' élèves inscrits'}</td>
+      <td><span class="badge ${s.type === 'domicile' ? 'badge-domicile' : 'badge-studio'}">${s.type === 'domicile' ? '🏠 Domicile' : '📍 Studio'}</span></td>
+      <td>${s.type === 'domicile' ? s.adresse : s.slots + '/' + s.total + ' places'}</td>
+      <td><button class="btn-validate btn-v-ok" onclick="showToast('Rappel envoyé', 'Email envoyé aux élèves inscrits.')">Rappel</button></td>
+    </tr>`).join('');
+
+  return kpis + `
+  <div class="dash-section-title"><div class="dst-line"></div>Séance de ce soir</div>
+  <div class="card" style="margin-bottom:1.75rem;padding:0;">
+    <div style="padding:1.25rem 1.5rem;border-bottom:1px solid rgba(184,150,90,0.1);display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:0.78rem;color:rgba(255,255,255,0.5);">📍 Studio — 70 Rue Sébastien Mercier, 75015 Paris · 17h00 → 19h00 · 4 élèves</div>
+      <span class="badge badge-pending">En cours</span>
+    </div>
+    <div class="agenda-list">${students}</div>
+  </div>
+
+  <div class="dash-section-title"><div class="dst-line"></div>Semaine à venir</div>
+  <div class="card" style="padding:0;">
+    <table class="dash-table">
+      <thead><tr><th>Jour</th><th>Heure</th><th>Élèves</th><th>Type</th><th>Lieu / Places</th><th>Action</th></tr></thead>
+      <tbody>${week}</tbody>
+    </table>
+  </div>`;
+}
+
+function validatePresence(i) {
+  presentMap[i] = true;
+  mentorTab('agenda');
+  showToast('Présence validée', `La présence a été enregistrée.`);
+}
+
+function renderMentorEleves() {
+  const rows = ELEVES.map(e => `
+  <tr>
+    <td><div class="av-row"><div class="av-sm">${e.initials}</div><div><div class="av-name">${e.name}</div><div class="av-class">${e.class}</div></div></div></td>
+    <td>${e.formule}</td>
+    <td>
+      <div style="font-size:0.8rem;margin-bottom:4px;">${e.seances}/${e.total} séances</div>
+      <div class="prog-bar-wrap"><div class="prog-bar" style="width:${Math.round(e.seances/e.total*100)}%"></div></div>
+    </td>
+    <td><span class="badge ${e.status === 'present' ? 'badge-present' : e.status === 'absent' ? 'badge-absent' : 'badge-pending'}">${e.status === 'present' ? '✓ Présent' : e.status === 'absent' ? '✕ Absent' : '⏳ Attente'}</span></td>
+    <td><span class="badge ${e.paid ? 'badge-paid' : 'badge-pending'}">${e.paid ? '✓ Payé' : '⏳ En attente'}</span></td>
+    <td><button class="btn-validate btn-v-ok" onclick="showToast('Compte-rendu', 'Formulaire de compte-rendu ouvert pour ${e.name}')">Compte-rendu</button></td>
+  </tr>`).join('');
+
+  return `
+  <div class="dash-grid grid-3" style="margin-bottom:1.75rem;">
+    <div class="card card-green card-sm"><div class="kpi-label">Élèves actifs</div><div class="kpi-value">8</div><div class="kpi-sub">Cette semaine</div></div>
+    <div class="card card-gold card-sm"><div class="kpi-label">Taux de présence</div><div class="kpi-value">94%</div><div class="kpi-sub">Ce mois-ci</div></div>
+    <div class="card card-red card-sm"><div class="kpi-label">Paiements en attente</div><div class="kpi-value">1</div><div class="kpi-sub">50 € à encaisser</div></div>
+  </div>
+  <div class="dash-section-title"><div class="dst-line"></div>Liste des élèves</div>
+  <div class="card" style="padding:0;">
+    <table class="dash-table">
+      <thead><tr><th>Élève</th><th>Formule</th><th>Avancement</th><th>Présence</th><th>Paiement</th><th>Action</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+function renderMentorFinances() {
+  const total = TRANSACTIONS.filter(t=>t.status==='paid').reduce((s,t)=>s+t.amount,0);
+  const pending = TRANSACTIONS.filter(t=>t.status==='pending').reduce((s,t)=>s+t.amount,0);
+
+  const rows = TRANSACTIONS.map(t => `
+  <div class="finance-row">
+    <div><div class="fi-desc">${t.desc}</div></div>
+    <div class="fi-date">${t.date}</div>
+    <div class="fi-amount ${t.status==='pending' ? '' : ''}">${t.amount} €</div>
+    <span class="badge ${t.status==='paid' ? 'badge-paid' : 'badge-pending'}">${t.status==='paid' ? '✓ Encaissé' : '⏳ En attente'}</span>
+  </div>`).join('');
+
+  return `
+  <div class="dash-grid grid-3" style="margin-bottom:1.75rem;">
+    <div class="card card-green card-sm"><div class="kpi-label">CA encaissé (mai)</div><div class="kpi-value">${total} €</div><div class="kpi-delta up">↑ +18% vs avril</div></div>
+    <div class="card card-gold card-sm"><div class="kpi-label">CA projeté (juin)</div><div class="kpi-value">800 €</div><div class="kpi-sub">4 séances prévues</div></div>
+    <div class="card card-red card-sm"><div class="kpi-label">En attente</div><div class="kpi-value">${pending} €</div><div class="kpi-sub">1 paiement manquant</div></div>
+  </div>
+  <div class="dash-section-title"><div class="dst-line"></div>Historique des paiements</div>
+  <div class="card" style="padding:0;">${rows}</div>
+
+  <div class="conseil-box">
+    <div class="conseil-title">💡 Conseil — Automatiser la comptabilité</div>
+    <p style="font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:0.75rem;">Pour que ces chiffres soient <strong style="color:#fff">réels et synchronisés automatiquement</strong> avec vos paiements Stripe, connectez votre compte Stripe à un tableau Notion ou Airtable via <strong style="color:var(--gold-light);">Zapier</strong> (sans code). Chaque paiement reçu met à jour la comptabilité automatiquement.</p>
+    <p style="font-size:0.78rem;color:rgba(255,255,255,0.3);">Alternativement, Supabase permet de stocker toutes les transactions en base de données et de les afficher ici en temps réel.</p>
+  </div>`;
+}
+
+function renderMentorRessources() {
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Bibliothèque de ressources</div>
+  <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:1.5rem;font-weight:300;">Ajoutez ici les PDF de cours que vos élèves verront dans leur espace personnel.</p>
+  <div style="display:flex;flex-direction:column;gap:0.5rem;">
+    ${[
+      {icon:'📐',title:'Algèbre — Fonctions et dérivées',meta:'Terminale · PDF · 12 pages · Ajouté 15 mai'},
+      {icon:'📊',title:'Statistiques & Probabilités',meta:'1ère · PDF · 8 pages · Ajouté 10 mai'},
+      {icon:'📏',title:'Géométrie dans l\'espace',meta:'2nde · PDF · 10 pages · Ajouté 5 mai'},
+      {icon:'🔢',title:'Suites numériques — Méthodes',meta:'Terminale · PDF · 6 pages · Ajouté 1 mai'},
+    ].map(r => `
+    <div class="ressource-card">
+      <div class="rc-icon">${r.icon}</div>
+      <div class="rc-info"><div class="rc-title">${r.title}</div><div class="rc-meta">${r.meta}</div></div>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="btn-validate btn-v-ok" onclick="showToast('Fichier envoyé','Le PDF a été partagé avec tous vos élèves.')">Partager</button>
+        <button class="btn-validate btn-v-ok" onclick="showToast('Supprimé','Ressource supprimée.')">✕</button>
+      </div>
+    </div>`).join('')}
+  </div>
+  <button class="f-submit" style="margin-top:1.5rem;max-width:260px;" onclick="showToast('Upload','Sélectionnez un fichier PDF à importer.')">+ Ajouter une ressource</button>`;
+}
+
+function renderMentorCertificats() {
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Génération de certificats</div>
+  <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:1.5rem;font-weight:300;">Générez et envoyez les attestations officielles de mentorat à vos élèves assidus.</p>
+  <div style="display:flex;flex-direction:column;gap:0.5rem;">
+    ${ELEVES.filter(e=>e.seances >= 5).map(e => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:var(--dark-2);border:1px solid rgba(184,150,90,0.1);">
+      <div class="av-row"><div class="av-sm">${e.initials}</div><div><div class="av-name">${e.name}</div><div class="av-class">${e.class} · ${e.seances} séances · ${e.formule}</div></div></div>
+      <div style="display:flex;gap:0.5rem;">
+        <button class="btn-validate btn-v-ok" onclick="showToast('Aperçu','Certificat généré pour ${e.name}.')">Aperçu</button>
+        <button class="btn-validate btn-v-ok" onclick="showToast('Envoyé !','Certificat PDF envoyé à ${e.name} par email.')">Envoyer PDF</button>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderParametres() {
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Mon profil</div>
+  <div class="card" style="max-width:540px;">
+    <div style="display:flex;align-items:center;gap:1.5rem;margin-bottom:1.75rem;padding-bottom:1.5rem;border-bottom:1px solid rgba(184,150,90,0.1);">
+      <div class="sb-avatar" style="width:64px;height:64px;font-size:1.5rem;">BT</div>
+      <div>
+        <div style="font-size:1.1rem;font-weight:500;color:#fff;">Bastien Thieulot</div>
+        <div style="font-size:0.75rem;color:var(--gold);margin-top:3px;">Mentor principal · L3 Maths, La Sorbonne</div>
+        <button class="btn-validate btn-v-ok" style="margin-top:0.5rem;" onclick="showToast('Photo','Sélectionnez une photo de profil.')">Changer la photo</button>
+      </div>
+    </div>
+    <div class="f-group"><label class="f-label">Prénom</label><input class="f-input" value="Bastien"></div>
+    <div class="f-group"><label class="f-label">Nom</label><input class="f-input" value="Thieulot"></div>
+    <div class="f-group"><label class="f-label">Email</label><input class="f-input" value="bastien@academie-thieulot.fr"></div>
+    <div class="f-group"><label class="f-label">Téléphone</label><input class="f-input" value="06 XX XX XX XX"></div>
+    <button class="f-submit" style="max-width:200px;margin-top:0.5rem;" onclick="showToast('Profil sauvegardé','Vos informations ont été mises à jour.')">Sauvegarder</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+//   ÉLÈVE TABS
+// ═══════════════════════════════════════════════════
+function eleveTab(tab) {
+  document.querySelectorAll('#page-eleve .sb-link').forEach(l => l.classList.remove('active'));
+  const links = document.querySelectorAll('#page-eleve .sb-link');
+  const tabMap = { accueil:0, seances:1, ressources:2, progression:3, certificat:4, reserver:6 };
+  if (links[tabMap[tab]]) links[tabMap[tab]].classList.add('active');
+
+  const titles = { accueil:'Tableau de bord', seances:'Mes séances', ressources:'Ressources Maths', progression:'Ma progression', certificat:'Mon certificat', reserver:'Réserver une séance' };
+  document.getElementById('eleve-page-title').textContent = titles[tab] || tab;
+
+  const c = document.getElementById('eleve-content');
+  if (tab === 'accueil') c.innerHTML = renderEleveAccueil();
+  else if (tab === 'seances') c.innerHTML = renderEleveSeances();
+  else if (tab === 'ressources') c.innerHTML = renderEleveRessources();
+  else if (tab === 'progression') c.innerHTML = renderEleveProgression();
+  else if (tab === 'certificat') c.innerHTML = renderEleveCertificat();
+  else if (tab === 'reserver') c.innerHTML = renderEleveReserver();
+}
+
+function renderEleveAccueil() {
+  return `
+  <div class="dash-grid grid-3" style="margin-bottom:1.75rem;">
+    <div class="card card-gold card-sm"><div class="kpi-label">Séances complétées</div><div class="kpi-value">7</div><div class="kpi-sub">Pack 10 séances</div><div class="prog-bar-wrap" style="margin-top:0.75rem;"><div class="prog-bar" style="width:70%"></div></div></div>
+    <div class="card card-green card-sm"><div class="kpi-label">Prochaine séance</div><div class="kpi-value" style="font-size:1.5rem;">Lun. 12</div><div class="kpi-sub">17h00 — Studio Paris 15e</div></div>
+    <div class="card card-blue card-sm"><div class="kpi-label">Progression Maths</div><div class="kpi-value">+4 pts</div><div class="kpi-sub">11 → 15 de moyenne</div><div class="kpi-delta up">↑ Excellent travail</div></div>
+  </div>
+
+  <div class="dash-section-title"><div class="dst-line"></div>Prochaines séances</div>
+  ${[
+    { day:'12', month:'juin', title:'Studio Soirée — Maths & Méthode', detail:'17h00 → 19h00 · Studio Paris 15e · Bastien & Emma', badge:'badge-studio', badgeLabel:'📍 Studio' },
+    { day:'14', month:'juin', title:'Studio Soirée — Physique & Révisions', detail:'17h00 → 19h00 · Studio Paris 15e · Bastien & Emma', badge:'badge-studio', badgeLabel:'📍 Studio' },
+  ].map(s => `
+  <div class="seance-card">
+    <div class="sc-date-block"><div class="sc-day">${s.day}</div><div class="sc-month">${s.month}</div></div>
+    <div class="sc-info"><div class="sc-title">${s.title}</div><div class="sc-detail">${s.detail}</div></div>
+    <div class="sc-action"><span class="badge ${s.badge}" style="margin-bottom:0.5rem;">${s.badgeLabel}</span></div>
+  </div>`).join('')}
+
+  <div class="dash-section-title" style="margin-top:1.75rem;"><div class="dst-line"></div>Dernier compte-rendu de Bastien</div>
+  <div class="card card-gold">
+    <div style="font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.75rem;">Séance du 9 juin 2025</div>
+    <p style="font-size:0.88rem;font-weight:300;color:rgba(255,255,255,0.6);line-height:1.8;">Léa a très bien travaillé ce soir. Nous avons terminé le chapitre sur les <strong style="color:#fff">suites numériques</strong> et avancé sur les probabilités conditionnelles. Elle est capable d'expliquer son raisonnement de façon autonome — excellent signe. À revoir avant la prochaine séance : <strong style="color:#fff">loi des grands nombres et espérance</strong>.</p>
+    <div style="font-size:0.72rem;color:rgba(255,255,255,0.25);margin-top:1rem;">— Bastien Thieulot, Mentor principal</div>
+  </div>`;
+}
+
+function renderEleveSeances() {
+  const all = [
+    { day:'12', month:'Juin', title:'Studio Soirée', matiere:'Maths & Méthode', heure:'17h → 19h', type:'À venir', badge:'badge-pending' },
+    { day:'9', month:'Juin', title:'Studio Soirée', matiere:'Suites & Probas', heure:'17h → 19h', type:'Complétée', badge:'badge-present' },
+    { day:'5', month:'Juin', title:'Studio Soirée', matiere:'Dérivées & Variations', heure:'17h → 19h', type:'Complétée', badge:'badge-present' },
+    { day:'28', month:'Mai', title:'Studio Soirée', matiere:'Géométrie vectorielle', heure:'17h → 19h', type:'Complétée', badge:'badge-present' },
+    { day:'26', month:'Mai', title:'Studio Soirée', matiere:'Algèbre & Fonctions', heure:'14h → 16h', type:'Complétée', badge:'badge-present' },
+  ];
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Toutes mes séances (7/10)</div>
+  <div class="prog-bar-wrap" style="margin-bottom:1.5rem;height:6px;"><div class="prog-bar" style="width:70%;height:6px;"></div></div>
+  ${all.map(s => `
+  <div class="seance-card">
+    <div class="sc-date-block"><div class="sc-day">${s.day}</div><div class="sc-month">${s.month}</div></div>
+    <div class="sc-info"><div class="sc-title">${s.title}</div><div class="sc-detail">${s.matiere} · ${s.heure} · Studio Paris 15e</div></div>
+    <div class="sc-action"><span class="badge ${s.badge}">${s.type}</span></div>
+  </div>`).join('')}`;
+}
+
+function renderEleveRessources() {
+  const docs = [
+    {icon:'📐',title:'Algèbre — Fonctions et dérivées',meta:'Terminale · PDF · 12 pages',color:'var(--gold)'},
+    {icon:'📊',title:'Statistiques & Probabilités — Fiche méthode',meta:'Terminale · PDF · 8 pages',color:'var(--blue-light)'},
+    {icon:'📏',title:'Géométrie dans l\'espace — Exercices corrigés',meta:'Terminale · PDF · 10 pages',color:'var(--green-light)'},
+    {icon:'🔢',title:'Suites numériques — Méthodes & Astuces',meta:'Terminale · PDF · 6 pages',color:'var(--gold)'},
+  ];
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Ressources partagées par Bastien</div>
+  <div style="display:flex;flex-direction:column;gap:0.5rem;">
+    ${docs.map(d => `
+    <div class="ressource-card" onclick="showToast('Téléchargement','PDF en cours de téléchargement…')">
+      <div class="rc-icon" style="color:${d.color};">${d.icon}</div>
+      <div class="rc-info"><div class="rc-title">${d.title}</div><div class="rc-meta">${d.meta}</div></div>
+      <div class="rc-arrow">⬇</div>
+    </div>`).join('')}
+  </div>
+  <div class="card card-gold" style="margin-top:1.5rem;">
+    <div style="font-size:0.7rem;letter-spacing:0.15em;color:var(--gold);margin-bottom:0.5rem;">💡 Conseil de Bastien</div>
+    <p style="font-size:0.85rem;font-weight:300;color:rgba(255,255,255,0.55);line-height:1.7;">Avant la prochaine séance, revoyez la fiche <strong style="color:#fff">Statistiques & Probabilités</strong> — notamment les pages 5 et 6 sur l'espérance. Nous ferons des exercices en direct.</p>
+  </div>`;
+}
+
+function renderEleveProgression() {
+  const notes = [
+    {matiere:'Maths',before:11,after:15,evol:'+4'},
+    {matiere:'Physique',before:12,after:14,evol:'+2'},
+    {matiere:'SVT',before:13,after:14,evol:'+1'},
+    {matiere:'Français',before:14,after:15,evol:'+1'},
+  ];
+  return `
+  <div class="dash-grid grid-3" style="margin-bottom:1.75rem;">
+    <div class="card card-green card-sm"><div class="kpi-label">Progression Maths</div><div class="kpi-value">+4 pts</div><div class="kpi-delta up">↑ 11 → 15/20</div></div>
+    <div class="card card-gold card-sm"><div class="kpi-label">Taux de présence</div><div class="kpi-value">100%</div><div class="kpi-sub">7 séances / 7</div></div>
+    <div class="card card-blue card-sm"><div class="kpi-label">Objectif Bac</div><div class="kpi-value">16/20</div><div class="kpi-delta up">↑ En bonne voie</div></div>
+  </div>
+  <div class="dash-section-title"><div class="dst-line"></div>Évolution par matière</div>
+  <div class="card">
+    ${notes.map(n => `
+    <div class="note-item">
+      <div class="note-matiere">${n.matiere}</div>
+      <div class="note-val">${n.after}/20</div>
+      <div class="note-prog">
+        <div style="display:flex;justify-content:space-between;font-size:0.65rem;color:rgba(255,255,255,0.3);margin-bottom:4px;">
+          <span>Avant : ${n.before}</span><span>Objectif : 16</span>
+        </div>
+        <div class="prog-bar-wrap"><div class="prog-bar" style="width:${n.after/20*100}%"></div></div>
+      </div>
+      <div class="note-evol">${n.evol} pts</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function renderEleveCertificat() {
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Mon certificat de mentorat</div>
+  <div class="dash-grid grid-2">
+    <div>
+      <p style="font-size:0.85rem;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.8;margin-bottom:1.25rem;">Vous avez complété <strong style="color:#fff">7 séances sur 10</strong>. Votre certificat semestriel sera généré automatiquement à la 10ème séance.</p>
+      <div style="background:rgba(184,150,90,0.08);border:1px solid rgba(184,150,90,0.2);padding:1.25rem;margin-bottom:1.25rem;">
+        <div style="font-size:0.7rem;color:var(--gold);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.5rem;">Progression vers le certificat</div>
+        <div class="prog-bar-wrap" style="height:8px;"><div class="prog-bar" style="width:70%;height:8px;"></div></div>
+        <div style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-top:0.5rem;">7/10 séances — encore 3 séances pour obtenir le certificat</div>
+      </div>
+      <div style="font-size:0.8rem;color:rgba(255,255,255,0.35);line-height:1.7;">
+        <div style="margin-bottom:0.4rem;">✦ Compétences certifiées : organisation, rigueur, mémorisation active</div>
+        <div style="margin-bottom:0.4rem;">✦ Volume horaire : 14h de mentorat</div>
+        <div>✦ Valorisable dans votre rubrique Parcoursup "Activités"</div>
+      </div>
+    </div>
+    <!-- Aperçu certificat -->
+    <div style="background:#fff;padding:2.25rem;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+      <div style="width:2.5rem;height:3px;background:var(--gold);margin-bottom:1.25rem;"></div>
+      <div style="font-size:0.58rem;letter-spacing:0.22em;text-transform:uppercase;color:var(--gold);margin-bottom:0.35rem;">Académie Thieulot — En cours de validation</div>
+      <div style="font-family:var(--serif);font-size:1.75rem;font-weight:400;color:#1a1a14;">Léa Martin</div>
+      <div style="font-family:var(--serif);font-size:0.85rem;font-style:italic;color:#6B6655;margin-bottom:1rem;">Élève en classe de Terminale, Lycée Camille Sée</div>
+      <div style="height:1px;background:linear-gradient(90deg,var(--gold),transparent);margin:1rem 0;"></div>
+      <div style="font-size:0.72rem;line-height:1.7;color:#6B6655;">
+        <p>Suit avec assiduité un programme de <strong style="color:#2C2B26;">mentorat sélectif</strong> — <strong style="color:#2C2B26;">14h / 20h</strong> complétées.</p>
+        <p style="margin-top:0.5rem;">Compétences : <strong style="color:#2C2B26;">organisation, rigueur, mémorisation active</strong>.</p>
+        <p style="margin-top:0.5rem;color:var(--gold);font-family:var(--serif);font-style:italic;">Mentors : Bastien Thieulot & Emma — La Sorbonne</p>
+      </div>
+      <div style="position:absolute;bottom:1.25rem;right:1.75rem;width:56px;height:56px;border:2px solid rgba(184,150,90,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.5rem;text-align:center;color:var(--gold);line-height:1.3;">En<br>cours<br>★</div>
+    </div>
+  </div>`;
+}
+
+function renderEleveReserver() {
+  const slots = [
+    {day:'Lundi 12 juin',time:'17h00 → 19h00',places:3,type:'studio'},
+    {day:'Mercredi 14 juin',time:'14h00 → 16h00',places:4,type:'studio'},
+    {day:'Mercredi 14 juin',time:'17h00 → 19h00',places:1,type:'studio'},
+    {day:'Vendredi 16 juin',time:'17h00 → 19h00',places:5,type:'studio'},
+  ];
+  return `
+  <div class="dash-section-title"><div class="dst-line"></div>Créneaux disponibles</div>
+  <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:1.25rem;font-weight:300;">Votre formule : <strong style="color:var(--gold-light);">Pack Trimestriel</strong> — 3 séances restantes.</p>
+  ${slots.map(s => `
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;background:var(--dark-2);border:1px solid rgba(184,150,90,0.1);margin-bottom:0.5rem;transition:border-color 0.2s;" onmouseover="this.style.borderColor='rgba(184,150,90,0.3)'" onmouseout="this.style.borderColor='rgba(184,150,90,0.1)'">
+    <div>
+      <div style="font-size:0.88rem;font-weight:400;color:#fff;">${s.day}</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.35);margin-top:2px;">Studio Paris 15e · ${s.time} · <span style="color:${s.places <= 1 ? 'var(--red-light)' : 'var(--green-light)'};">${s.places} place${s.places>1?'s':''} restante${s.places>1?'s':''}</span></div>
+    </div>
+    <button class="btn-validate btn-v-ok" onclick="showToast('Séance réservée !', '${s.day} à ${s.time} — Confirmation par email.')">Réserver</button>
+  </div>`).join('')}
+
+  <div class="dash-section-title" style="margin-top:2rem;"><div class="dst-line"></div>Ou demander un cours à domicile</div>
+  <div class="card card-blue">
+    <p style="font-size:0.85rem;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:1rem;">Pour un cours particulier de Maths à domicile avec Bastien (60€/h, crédit d'impôt applicable — reste à charge 30€/h), envoyez une demande directement.</p>
+    <div class="f-group"><label class="f-label">Vos disponibilités</label><input class="f-input" placeholder="Ex : Samedi matin, vendredi 18h…"></div>
+    <div class="f-group"><label class="f-label">Chapitres à travailler</label><input class="f-input" placeholder="Ex : Dérivées, probabilités conditionnelles…"></div>
+    <button class="f-submit" style="max-width:220px;margin-top:0.5rem;" onclick="showToast('Demande envoyée','Bastien vous contactera sous 24h pour confirmer.')">Envoyer la demande →</button>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════
+//   CONSEIL TECHNIQUE (affiché dans finances mentor)
+// ═══════════════════════════════════════════════════
+// (intégré dans renderMentorFinances)
+
+// ═══════════════════════════════════════════════════
+//   INIT
+// ═══════════════════════════════════════════════════
+initMentorDate();
+initEleveDate();
+
+
+/* ════════════════════════════════════════
+   INIT
+════════════════════════════════════════ */
+initMentorDate();
+initEleveDate();
+
+/* ════════════════════════════════════════
+   EXPORTS WINDOW (boutons onclick="...")
+════════════════════════════════════════ */
+[setRole, setAuthMode, doLogin, doRegister, goToLogin, loginAs,
+ mentorTab, eleveTab, showToast, validatePresence
+].forEach(fn => { if (typeof fn === 'function') window[fn.name] = fn; });
+
+}; // fin window.onload
+</script>
+
+<!-- ══════════════════════════════════════
+     CONSEIL TECH — PANNEAU FIXE EN BAS DU LOGIN
+══════════════════════════════════════ -->
+<div id="tech-panel" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:300;align-items:center;justify-content:center;padding:2rem;">
+</div>
+
+</body>
+</html>
