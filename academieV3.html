@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Académie Thieulot — Cours particuliers Maths, Paris 15e</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --gold:#B8965A;--gold-light:#D4B483;--gold-pale:#F5EDD8;
+  --dark:#0E0E0C;--dark-2:#1A1A16;--dark-3:#252520;
+  --cream:#F7F3EC;--cream-2:#EEE8DA;
+  --text:#2C2B26;--text-muted:#6B6655;
+  --serif:'Cormorant Garamond',Georgia,serif;
+  --sans:'Jost',sans-serif;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--cream);color:var(--text);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.25rem 4rem;
+  background:rgba(14,14,12,0.95);backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(184,150,90,0.2);
+}
+.nav-logo{font-family:var(--serif);font-size:1.2rem;font-weight:500;color:var(--gold-light);letter-spacing:0.05em;text-decoration:none;}
+.nav-logo span{color:rgba(255,255,255,0.4);font-weight:300;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-size:0.72rem;font-weight:400;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.55);text-decoration:none;transition:color 0.3s;}
+.nav-links a:hover{color:var(--gold-light);}
+.nav-cta{font-size:0.72rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:0.6rem 1.4rem;text-decoration:none;transition:background 0.3s;white-space:nowrap;}
+.nav-cta:hover{background:var(--gold-light);}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;background:var(--dark);display:grid;grid-template-columns:1fr 1fr;position:relative;overflow:hidden;}
+.hero-left{display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 6rem;position:relative;z-index:2;}
+.hero-eyebrow{font-size:0.68rem;font-weight:400;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:2rem;display:flex;align-items:center;gap:1rem;}
+.hero-eyebrow::before{content:'';display:inline-block;width:2.5rem;height:1px;background:var(--gold);}
+.hero h1{font-family:var(--serif);font-size:4.25rem;font-weight:300;line-height:1.1;color:#fff;margin-bottom:1.75rem;}
+.hero h1 em{font-style:italic;color:var(--gold-light);}
+.hero-sub{font-size:0.92rem;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.85;max-width:400px;margin-bottom:3rem;}
+.hero-actions{display:flex;gap:1.5rem;align-items:center;flex-wrap:wrap;}
+.btn-primary{font-size:0.72rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:1rem 2.25rem;text-decoration:none;transition:background 0.3s;display:inline-block;cursor:pointer;border:none;font-family:var(--sans);}
+.btn-primary:hover{background:var(--gold-light);}
+.btn-ghost{font-size:0.72rem;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.2);padding-bottom:2px;transition:all 0.3s;cursor:pointer;}
+.btn-ghost:hover{color:var(--gold-light);border-color:var(--gold);}
+
+/* Hero badges */
+.hero-badges{display:flex;flex-wrap:wrap;gap:0.6rem;margin-top:2rem;}
+.hero-badge{font-size:0.65rem;letter-spacing:0.1em;color:rgba(255,255,255,0.4);border:1px solid rgba(184,150,90,0.2);padding:0.4rem 0.85rem;white-space:nowrap;}
+
+/* Hero right — robot */
+.hero-right{position:relative;overflow:hidden;background:#0a0a08;min-height:100vh;}
+#spotlight{position:absolute;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle at center,rgba(184,150,90,0.15) 0%,transparent 70%);pointer-events:none;transform:translate(-50%,-50%);z-index:1;top:50%;left:50%;transition:left 0.05s,top 0.05s;}
+spline-viewer{width:100%;height:100%;position:absolute;inset:0;z-index:2;}
+
+/* Badge robot — bas droite GROS */
+.robot-badge-bottom{
+  position:absolute;bottom:0;right:0;z-index:4;
+  background:var(--gold);
+  padding:1.75rem 2.25rem;
+  min-width:220px;
+}
+.rbb-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(0,0,0,0.5);font-family:var(--sans);margin-bottom:0.4rem;}
+.rbb-value{font-family:var(--serif);font-size:3rem;font-weight:300;color:var(--dark);line-height:1;}
+.rbb-sub{font-size:0.72rem;color:rgba(0,0,0,0.55);font-family:var(--sans);margin-top:0.35rem;line-height:1.4;}
+
+/* Badge robot — haut gauche FIXÉ */
+.robot-badge-top{
+  position:absolute;top:0;left:0;z-index:4;
+  background:rgba(14,14,12,0.92);
+  border-right:1px solid rgba(184,150,90,0.3);
+  border-bottom:1px solid rgba(184,150,90,0.3);
+  backdrop-filter:blur(10px);
+  padding:1.25rem 1.75rem;
+}
+.rbt-label{font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.4rem;}
+.rbt-value{font-family:var(--serif);font-size:1.2rem;font-weight:400;color:#fff;line-height:1.3;}
+
+/* ── MARQUEE ── */
+.marquee-wrap{background:var(--dark-2);padding:1.1rem 0;overflow:hidden;border-top:1px solid rgba(184,150,90,0.12);border-bottom:1px solid rgba(184,150,90,0.12);}
+.marquee-track{display:flex;gap:3rem;animation:marquee 28s linear infinite;white-space:nowrap;}
+.marquee-item{display:flex;align-items:center;gap:0.85rem;font-size:0.68rem;font-weight:400;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.3);flex-shrink:0;}
+.marquee-dot{width:4px;height:4px;background:var(--gold);border-radius:50%;flex-shrink:0;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+section{padding:7rem 4rem;}
+.section-eyebrow{font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;}
+.section-eyebrow::before{content:'';display:inline-block;width:2rem;height:1px;background:var(--gold);}
+.section-title{font-family:var(--serif);font-size:3rem;font-weight:300;line-height:1.15;color:var(--dark);margin-bottom:1.5rem;}
+.section-title em{font-style:italic;color:var(--gold);}
+.section-title.light{color:#fff;}
+.section-body{font-size:0.92rem;font-weight:300;line-height:1.85;color:var(--text-muted);max-width:520px;}
+
+/* ── CONCEPT ── */
+.concept{background:var(--cream);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+
+/* Canvas shader dans concept */
+.concept-canvas-wrap{position:relative;height:520px;overflow:hidden;}
+.concept-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.concept-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,14,12,0.75) 0%,rgba(14,14,12,0.3) 100%);z-index:1;}
+.concept-cards{position:absolute;inset:0;z-index:2;display:grid;grid-template-rows:1fr 1fr 1fr;gap:2px;}
+.concept-card{padding:2rem;display:flex;flex-direction:column;justify-content:flex-end;border-bottom:1px solid rgba(184,150,90,0.15);}
+.concept-card:last-child{border-bottom:none;}
+.cc-label{font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;font-family:var(--sans);color:var(--gold);margin-bottom:0.4rem;}
+.cc-text{font-family:var(--serif);font-size:1.35rem;font-weight:300;color:#fff;line-height:1.3;}
+
+/* Pill IA */
+.ia-pill{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(184,150,90,0.12);border:1px solid rgba(184,150,90,0.3);padding:0.5rem 1rem;font-size:0.72rem;color:var(--gold-light);font-family:var(--sans);margin-bottom:1.25rem;letter-spacing:0.05em;}
+.ia-pill::before{content:'⚠';font-size:0.85rem;}
+
+/* ── OFFRES ── */
+.offre-section{background:var(--dark);}
+.offre-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:2rem;background:rgba(184,150,90,0.12);}
+.offre-grid-2{grid-template-columns:1fr 1fr;}
+.offre-card{background:var(--dark-2);padding:2.75rem 2.25rem;position:relative;transition:background 0.3s;}
+.offre-card:hover{background:var(--dark-3);}
+.offre-card.featured{background:var(--gold);}
+.offre-card.featured:hover{background:var(--gold-light);}
+.offre-badge{position:absolute;top:1.25rem;right:1.25rem;font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;background:rgba(0,0,0,0.18);color:rgba(0,0,0,0.55);padding:0.3rem 0.7rem;font-family:var(--sans);}
+.offre-num{font-family:var(--serif);font-size:3.5rem;font-weight:300;color:rgba(184,150,90,0.15);line-height:1;margin-bottom:1.25rem;}
+.offre-card.featured .offre-num{color:rgba(0,0,0,0.12);}
+.offre-name{font-family:var(--serif);font-size:1.5rem;font-weight:400;color:#fff;margin-bottom:0.65rem;}
+.offre-card.featured .offre-name{color:var(--dark);}
+.offre-desc{font-size:0.82rem;font-weight:300;color:rgba(255,255,255,0.45);line-height:1.7;margin-bottom:1.75rem;}
+.offre-card.featured .offre-desc{color:rgba(0,0,0,0.55);}
+.offre-price{font-family:var(--serif);font-size:2.25rem;font-weight:300;color:var(--gold-light);}
+.offre-card.featured .offre-price{color:var(--dark);}
+.offre-unit{font-size:0.68rem;color:rgba(255,255,255,0.3);margin-bottom:1.75rem;margin-top:0.2rem;}
+.offre-card.featured .offre-unit{color:rgba(0,0,0,0.4);}
+.offre-features{list-style:none;display:flex;flex-direction:column;gap:0.65rem;margin-bottom:1.75rem;}
+.offre-features li{font-size:0.78rem;font-weight:300;color:rgba(255,255,255,0.5);padding-left:1.25rem;position:relative;line-height:1.5;}
+.offre-card.featured .offre-features li{color:rgba(0,0,0,0.6);}
+.offre-features li::before{content:'—';position:absolute;left:0;color:var(--gold);}
+.offre-card.featured .offre-features li::before{color:rgba(0,0,0,0.35);}
+.offre-cta-btn{display:block;text-align:center;font-size:0.72rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;padding:0.9rem;text-decoration:none;transition:all 0.3s;color:var(--gold);border:1px solid rgba(184,150,90,0.3);}
+.offre-cta-btn:hover{background:rgba(184,150,90,0.1);}
+.featured-cta{color:var(--dark)!important;background:rgba(0,0,0,0.18)!important;border-color:rgba(0,0,0,0.1)!important;}
+.featured-cta:hover{background:rgba(0,0,0,0.28)!important;}
+.credit-impot-badge{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-left:3px solid var(--gold);padding:1rem 1.25rem;margin-bottom:1.5rem;}
+.offre-card.featured .credit-impot-badge{background:rgba(0,0,0,0.1);border-color:rgba(0,0,0,0.15);border-left-color:rgba(0,0,0,0.3);}
+.ci-titre{font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;font-family:var(--sans);font-weight:500;}
+.offre-card.featured .ci-titre{color:rgba(0,0,0,0.5);}
+.ci-detail{font-size:0.78rem;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.65;}
+.offre-card.featured .ci-detail{color:rgba(0,0,0,0.55);}
+.ci-detail strong{color:var(--gold-light);font-weight:500;}
+.offre-card.featured .ci-detail strong{color:var(--dark);}
+
+/* Separateur */
+.offre-separateur{display:flex;align-items:center;gap:2rem;margin:3rem 0 1.5rem;}
+.sep-line{flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.sep-content{display:flex;flex-direction:column;align-items:center;gap:0.5rem;flex-shrink:0;}
+.offre-lieu-tag{font-size:0.72rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 1rem;font-family:var(--sans);}
+.studio-tag{background:rgba(184,150,90,0.18);color:var(--gold-light);border:1px solid rgba(184,150,90,0.3);}
+.domicile-tag{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);}
+.offre-lieu-sub{font-size:0.72rem;color:rgba(255,255,255,0.3);font-family:var(--sans);font-weight:300;}
+
+/* ── PROCESSUS ── */
+.process-section{background:var(--cream-2);}
+.process-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5rem;margin-top:4rem;}
+.process-step{position:relative;}
+.process-step:not(:last-child)::after{content:'';position:absolute;top:1.5rem;right:-1.25rem;width:2.5rem;height:1px;background:linear-gradient(90deg,var(--gold-light),transparent);}
+.step-num{font-family:var(--serif);font-size:2.75rem;font-weight:300;color:transparent;-webkit-text-stroke:1px var(--gold-light);line-height:1;margin-bottom:1.25rem;}
+.step-title{font-family:var(--serif);font-size:1.15rem;font-weight:500;color:var(--dark);margin-bottom:0.65rem;}
+.step-desc{font-size:0.8rem;font-weight:300;color:var(--text-muted);line-height:1.75;}
+
+/* ── RÉSERVATION ── */
+.reservation-section{background:var(--dark);display:grid;grid-template-columns:1fr 1fr;padding:0;}
+.resa-left{padding:6rem 4rem;display:flex;flex-direction:column;justify-content:center;}
+.resa-right{background:var(--dark-2);border-left:1px solid rgba(184,150,90,0.12);padding:4rem 3.5rem;display:flex;flex-direction:column;gap:1.25rem;}
+.resa-section-title{font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.28);margin-bottom:0.6rem;}
+.form-group{display:flex;flex-direction:column;gap:0.45rem;}
+.form-label{font-size:0.62rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.38);}
+.form-input,.form-select,.form-textarea{background:var(--dark-3);border:1px solid rgba(184,150,90,0.18);color:#fff;padding:0.8rem 1.1rem;font-family:var(--sans);font-size:0.88rem;font-weight:300;outline:none;transition:border-color 0.3s;width:100%;appearance:none;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(184,150,90,0.55);}
+.form-input::placeholder{color:rgba(255,255,255,0.18);}
+.form-select option{background:#1a1a16;color:#fff;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.85rem;}
+.form-textarea{resize:vertical;min-height:80px;}
+.form-submit{font-size:0.72rem;font-weight:500;letter-spacing:0.15em;text-transform:uppercase;color:var(--dark);background:var(--gold);border:none;padding:1rem;cursor:pointer;transition:background 0.3s;width:100%;margin-top:0.25rem;font-family:var(--sans);}
+.form-submit:hover{background:var(--gold-light);}
+.success-msg{display:none;background:rgba(184,150,90,0.15);border:1px solid rgba(184,150,90,0.4);padding:1.25rem 1.5rem;margin-top:1rem;}
+.success-msg p{font-size:0.85rem;color:var(--gold-light);font-family:var(--sans);font-weight:300;line-height:1.6;}
+.success-msg.show{display:block;}
+
+/* ── TEMOIGNAGES ── */
+.temoignages{background:var(--cream);}
+.temo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:4rem;background:rgba(184,150,90,0.12);}
+.temo-card{background:var(--cream);padding:2.75rem 2.25rem;position:relative;}
+.temo-card::before{content:'\201C';font-family:var(--serif);font-size:5rem;color:rgba(184,150,90,0.15);position:absolute;top:0.75rem;left:1.75rem;line-height:1;}
+.temo-stars{color:var(--gold);font-size:0.7rem;letter-spacing:0.15em;margin-bottom:0.75rem;}
+.temo-text{font-family:var(--serif);font-size:1rem;font-weight:300;font-style:italic;color:var(--dark);line-height:1.75;margin-bottom:1.75rem;margin-top:1.25rem;position:relative;z-index:1;}
+.temo-author{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--text-muted);font-weight:400;}
+.temo-role{font-size:0.62rem;color:var(--gold);margin-top:3px;letter-spacing:0.08em;}
+
+/* ── PAGE QUI SUIS-JE ── */
+.about-hero{
+  min-height:100vh;background:var(--dark);
+  display:grid;grid-template-columns:1fr 1fr;
+  position:relative;overflow:hidden;
+}
+.about-canvas-wrap{position:relative;overflow:hidden;}
+.about-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.about-overlay{position:absolute;inset:0;background:linear-gradient(to right,var(--dark) 0%,transparent 60%);z-index:1;pointer-events:none;}
+.about-content{position:relative;z-index:2;padding:8rem 4rem 6rem;display:flex;flex-direction:column;justify-content:center;}
+.about-photo-side{position:relative;}
+
+/* About cards côté droit */
+.about-float-card{
+  position:absolute;z-index:3;
+  background:rgba(14,14,12,0.9);backdrop-filter:blur(10px);
+  border:1px solid rgba(184,150,90,0.3);padding:1.25rem 1.75rem;
+}
+.afc-label{font-size:0.58rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.3rem;}
+.afc-value{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:#fff;}
+
+/* Blocs texte about */
+.about-sections{background:var(--cream);}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;margin-top:4rem;}
+.about-block{padding:2.5rem;background:#fff;border:1px solid rgba(184,150,90,0.12);}
+.about-block-icon{font-size:1.5rem;margin-bottom:1rem;}
+.about-block-title{font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--dark);margin-bottom:0.75rem;}
+.about-block-text{font-size:0.85rem;font-weight:300;color:var(--text-muted);line-height:1.8;}
+
+/* Citation */
+.about-quote{
+  background:var(--dark-2);border-left:3px solid var(--gold);
+  padding:2rem 2.5rem;margin:3rem 0;
+}
+.aq-text{font-family:var(--serif);font-size:1.4rem;font-weight:300;font-style:italic;color:#fff;line-height:1.6;}
+.aq-author{font-size:0.68rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-top:1rem;}
+
+/* Timeline */
+.timeline{display:flex;flex-direction:column;gap:0;margin-top:3rem;}
+.tl-item{display:grid;grid-template-columns:80px 1fr;gap:1.5rem;padding:1.5rem 0;border-bottom:1px solid rgba(184,150,90,0.1);}
+.tl-item:last-child{border-bottom:none;}
+.tl-year{font-family:var(--serif);font-size:1.1rem;color:var(--gold-light);font-weight:300;}
+.tl-content{}
+.tl-title{font-size:0.88rem;font-weight:500;color:var(--dark);margin-bottom:0.25rem;}
+.tl-desc{font-size:0.8rem;font-weight:300;color:var(--text-muted);line-height:1.65;}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);padding:5rem 4rem 3rem;border-top:1px solid rgba(184,150,90,0.15);}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:4rem;padding-bottom:4rem;border-bottom:1px solid rgba(255,255,255,0.06);}
+.footer-brand{font-family:var(--serif);font-size:1.4rem;font-weight:400;color:var(--gold-light);margin-bottom:1rem;}
+.footer-tagline{font-size:0.8rem;font-weight:300;color:rgba(255,255,255,0.28);line-height:1.7;max-width:240px;}
+.footer-col-title{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.1rem;font-family:var(--sans);}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:0.55rem;}
+.footer-links a{font-size:0.78rem;font-weight:300;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s;font-family:var(--sans);cursor:pointer;}
+.footer-links a:hover{color:var(--gold-light);}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:0.68rem;color:rgba(255,255,255,0.18);}
+.footer-legal{display:flex;gap:1.75rem;}
+.footer-legal a{font-size:0.68rem;color:rgba(255,255,255,0.18);text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.footer-legal a:hover{color:rgba(255,255,255,0.4);}
+
+/* ── SCROLL REVEAL ── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.75s ease,transform 0.75s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  nav{padding:1.1rem 1.5rem;}
+  .nav-links{display:none;}
+  section{padding:5rem 1.5rem;}
+  .hero,.about-hero{grid-template-columns:1fr;}
+  .hero h1{font-size:2.75rem;}
+  .hero-right{display:none;}
+  .hero-left,.about-content{padding:7rem 1.5rem 5rem;}
+  .about-photo-side{display:none;}
+  .concept{grid-template-columns:1fr;gap:3rem;}
+  .concept-canvas-wrap{height:320px;}
+  .offre-grid{grid-template-columns:1fr;}
+  .offre-grid-2{grid-template-columns:1fr;}
+  .process-grid{grid-template-columns:1fr 1fr;}
+  .process-step:not(:last-child)::after{display:none;}
+  .reservation-section{grid-template-columns:1fr;}
+  .resa-left,.resa-right{padding:4rem 1.5rem;}
+  .resa-right{border-left:none;border-top:1px solid rgba(184,150,90,0.12);}
+  .temo-grid{grid-template-columns:1fr;}
+  .about-grid{grid-template-columns:1fr;}
+  .footer-top{grid-template-columns:1fr 1fr;gap:2rem;}
+  .footer-bottom{flex-direction:column;gap:1rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('main')">Académie <span>Thieulot</span></a>
+  <ul class="nav-links">
+    <li><a href="#concept" onclick="showPage('main')">Approche</a></li>
+    <li><a href="#offres" onclick="showPage('main')">Tarifs</a></li>
+    <li><a href="#reservation" onclick="showPage('main')">Contact</a></li>
+    <li><a onclick="showPage('about')" style="cursor:pointer;">Qui suis-je ?</a></li>
+  </ul>
+  <a href="#reservation" class="nav-cta" onclick="showPage('main')">Prendre contact</a>
+</nav>
+
+<!-- ══════════════ PAGE PRINCIPALE ══════════════ -->
+<div class="page active" id="page-main">
+
+<!-- HERO -->
+<section class="hero" id="accueil" style="padding:0;">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Paris 15e · Cours particuliers · Sorbonne</div>
+    <h1>Les Maths,<br>enfin <em>comprises</em><br>chez vous.</h1>
+    <p class="hero-sub">Bastien Thieulot, étudiant en L3 Mathématiques à la Sorbonne, se déplace à votre domicile pour des cours 100% personnalisés. Préparation DS, Bac, concours — du collège à la terminale.</p>
+    <div class="hero-actions">
+      <a href="#reservation" class="btn-primary">Prendre contact — 60 €/h</a>
+      <a href="#concept" class="btn-ghost">Découvrir l'approche</a>
+    </div>
+    <div class="hero-badges">
+      <span class="hero-badge">✦ Cours individuel à domicile</span>
+      <span class="hero-badge">✦ L3 Maths — Sorbonne</span>
+      <span class="hero-badge">✦ Crédit d'impôt 50%</span>
+      <span class="hero-badge">✦ Reste à charge : 30 €/h</span>
+    </div>
+  </div>
+
+  <div class="hero-right" id="hero-right">
+    <div id="spotlight"></div>
+    <spline-viewer url="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"></spline-viewer>
+
+    <!-- Badge haut gauche -->
+    <div class="robot-badge-top">
+      <div class="rbt-label">Mentor · Sorbonne</div>
+      <div class="rbt-value">L3 Maths<br>Paris</div>
+    </div>
+
+    <!-- Badge bas droite — GRAND -->
+    <div class="robot-badge-bottom">
+      <div class="rbb-label">Reste à charge réel</div>
+      <div class="rbb-value">30 €<span style="font-size:1.5rem;">/h</span></div>
+      <div class="rbb-sub">après crédit d'impôt 50%<br>Art. 199 sexdecies CGI</div>
+    </div>
+  </div>
+</section>
+
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.9.82/build/spline-viewer.js"></script>
+<script>
+(function(){
+  const hr = document.getElementById('hero-right');
+  const sp = document.getElementById('spotlight');
+  if(!hr||!sp) return;
+  hr.addEventListener('mousemove', e => {
+    const r = hr.getBoundingClientRect();
+    sp.style.left = (e.clientX - r.left) + 'px';
+    sp.style.top  = (e.clientY - r.top)  + 'px';
+  });
+})();
+</script>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="marquee-dot"></span>L3 Mathématiques — La Sorbonne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cours individuel à domicile</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Crédit d'impôt 50% — reste à charge 30 €/h</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Du collège à la Terminale</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Préparation DS, Bac, Concours</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Compte-rendu après chaque cours</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>4 ans d'expérience pédagogique</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Anti-IA passive · Vraie compréhension</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>L3 Mathématiques — La Sorbonne</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Cours individuel à domicile</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Crédit d'impôt 50% — reste à charge 30 €/h</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Du collège à la Terminale</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Préparation DS, Bac, Concours</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Compte-rendu après chaque cours</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>4 ans d'expérience pédagogique</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Anti-IA passive · Vraie compréhension</span>
+  </div>
+</div>
+
+<!-- CONCEPT -->
+<section class="concept" id="concept">
+  <!-- Colonne gauche : canvas shader + cards -->
+  <div class="concept-canvas-wrap reveal">
+    <canvas class="concept-canvas" id="concept-canvas"></canvas>
+    <div class="concept-overlay"></div>
+    <div class="concept-cards">
+      <div class="concept-card">
+        <div class="cc-label">Le problème aujourd'hui</div>
+        <div class="cc-text">ChatGPT fait les devoirs.<br>L'élève recopie. Il ne comprend rien.</div>
+      </div>
+      <div class="concept-card">
+        <div class="cc-label">Mon approche</div>
+        <div class="cc-text">Je guide jusqu'au déclic.<br>Pas de réponse donnée, juste trouvée.</div>
+      </div>
+      <div class="concept-card">
+        <div class="cc-label">Le résultat</div>
+        <div class="cc-text">Autonomie. Méthode. Confiance.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Colonne droite : texte -->
+  <div class="reveal" style="transition-delay:0.15s;">
+    <div class="section-eyebrow">Mon approche</div>
+    <h2 class="section-title">Des Maths <em>vraiment comprises</em>,<br>pas juste recopiées.</h2>
+
+    <div class="ia-pill">L'IA ne remplace pas la compréhension</div>
+
+    <p class="section-body">Aujourd'hui, un élève peut photographier un exercice, l'envoyer à ChatGPT et obtenir une solution parfaite en trois secondes. Résultat : le devoir est "fait", mais en classe, il est perdu. Cette illusion de réussite est peut-être le piège le plus dangereux de notre époque scolaire.</p>
+    <p class="section-body" style="margin-top:1.25rem;">Mon rôle n'est pas de donner les réponses — c'est de créer le moment où l'élève les trouve lui-même. Ce moment-là, aucune IA ne peut le provoquer. Après 4 ans à enseigner en banlieue parisienne, j'ai appris à repérer le vrai blocage derrière la mauvaise note, et à remonter jusqu'à sa racine.</p>
+    <p class="section-body" style="margin-top:1.25rem;">Chaque cours se termine par un compte-rendu envoyé aux parents : ce qui a été travaillé, ce qui a progressé, ce qui reste à consolider. Pas de vague "ça s'est bien passé" — de la transparence réelle.</p>
+    <a href="#offres" class="btn-primary" style="margin-top:2.5rem;display:inline-block;">Voir les tarifs →</a>
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section class="offre-section" id="offres">
+  <div class="section-eyebrow" style="color:var(--gold);">Tarifs</div>
+  <h2 class="section-title light reveal">Simple, <em>transparent</em>,<br>sans mauvaise surprise.</h2>
+
+  <div class="offre-separateur reveal">
+    <div class="sep-line"></div>
+    <div class="sep-content">
+      <span class="offre-lieu-tag domicile-tag">🏠 Cours Particuliers — À Domicile</span>
+      <span class="offre-lieu-sub">Disponible maintenant · Paris 15e et arrondissements voisins</span>
+    </div>
+    <div class="sep-line"></div>
+  </div>
+
+  <div class="offre-grid offre-grid-2 reveal">
+    <div class="offre-card featured">
+      <div class="offre-badge">Disponible maintenant</div>
+      <div class="offre-num">01</div>
+      <div class="offre-name">Cours de Maths — 1h</div>
+      <div class="offre-desc">Une heure intensive, chez vous. On attaque directement le blocage du moment : exercice raté, chapitre incompris, DS à préparer. Zéro temps perdu.</div>
+      <div class="offre-price">60 €</div>
+      <div class="offre-unit">Par heure · Cours individuel · Chez l'élève</div>
+      <ul class="offre-features">
+        <li>Cours 1-pour-1, 100% personnalisé</li>
+        <li>Spécialisation Mathématiques</li>
+        <li>Préparation DS, Bac, Concours</li>
+        <li>Programme adapté au niveau de l'élève</li>
+        <li>Compte-rendu envoyé aux parents</li>
+      </ul>
+      <div class="credit-impot-badge">
+        <div class="ci-titre">💡 Crédit d'impôt services à la personne</div>
+        <div class="ci-detail">50% remboursés par l'État · <strong>Reste à charge réel : 30 €/h</strong> · Attestation fiscale fournie</div>
+      </div>
+      <a href="#reservation" class="offre-cta-btn featured-cta">Prendre contact →</a>
+    </div>
+    <div class="offre-card">
+      <div class="offre-num">02</div>
+      <div class="offre-name">Cours de Maths — 2h</div>
+      <div class="offre-desc">La formule idéale pour les séances de fond : révision complète d'un chapitre, préparation à un examen, rattrapage de plusieurs semaines de cours.</div>
+      <div class="offre-price">120 €</div>
+      <div class="offre-unit">2 heures · Cours individuel · Chez l'élève</div>
+      <ul class="offre-features">
+        <li>Tous les avantages du cours 1h</li>
+        <li>Idéal pour les révisions en profondeur</li>
+        <li>Préparation Bac blanc ou DST</li>
+        <li>Exercices corrigés + méthodes transmises</li>
+        <li>Bilan détaillé envoyé aux parents</li>
+      </ul>
+      <div class="credit-impot-badge">
+        <div class="ci-titre">💡 Crédit d'impôt services à la personne</div>
+        <div class="ci-detail">50% remboursés par l'État · <strong>Reste à charge réel : 60 €</strong> · Attestation fiscale fournie</div>
+      </div>
+      <a href="#reservation" class="offre-cta-btn">Prendre contact →</a>
+    </div>
+  </div>
+
+  <!-- Studio bientôt -->
+  <div class="offre-separateur reveal" style="margin-top:3.5rem;">
+    <div class="sep-line"></div>
+    <div class="sep-content">
+      <span class="offre-lieu-tag studio-tag">📍 Séances en Studio — Bientôt</span>
+      <span class="offre-lieu-sub">Paris 15e · Sessions collectives · Ouverture rentrée 2025</span>
+    </div>
+    <div class="sep-line"></div>
+  </div>
+
+  <div class="offre-grid reveal">
+    <div class="offre-card" style="opacity:0.5;pointer-events:none;">
+      <div class="offre-badge" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);">Bientôt</div>
+      <div class="offre-num">03</div>
+      <div class="offre-name">Studio — Soirée</div>
+      <div class="offre-desc">Sessions collectives 2h, max 5 élèves, studio Paris 15e. Toutes matières.</div>
+      <div class="offre-price">50 €</div>
+      <div class="offre-unit">Par séance — 2h · 5 élèves max</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-top:1.5rem;text-align:center;letter-spacing:0.1em;">— Rentrée 2025 —</div>
+    </div>
+    <div class="offre-card" style="opacity:0.5;pointer-events:none;">
+      <div class="offre-badge" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);">Bientôt</div>
+      <div class="offre-num">04</div>
+      <div class="offre-name">Stage Intensif Maths</div>
+      <div class="offre-desc">5 jours × 2h pendant les vacances. Focus 100% Maths, progression mesurable.</div>
+      <div class="offre-price">250 €</div>
+      <div class="offre-unit">Stage 10h · Vacances scolaires</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-top:1.5rem;text-align:center;letter-spacing:0.1em;">— Rentrée 2025 —</div>
+    </div>
+    <div class="offre-card" style="opacity:0.5;pointer-events:none;">
+      <div class="offre-badge" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.25);">Bientôt</div>
+      <div class="offre-num">05</div>
+      <div class="offre-name">Pack Trimestriel</div>
+      <div class="offre-desc">10 séances Studio, priorité de réservation, suivi mensuel, certificat Sorbonne.</div>
+      <div class="offre-price">420 €</div>
+      <div class="offre-unit">10 séances — 42 €/séance</div>
+      <div style="font-size:0.7rem;color:rgba(255,255,255,0.2);margin-top:1.5rem;text-align:center;letter-spacing:0.1em;">— Rentrée 2025 —</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESSUS -->
+<section class="process-section">
+  <div class="section-eyebrow">Comment ça marche</div>
+  <h2 class="section-title reveal">Du premier contact<br>au premier <em>déclic</em>.</h2>
+  <div class="process-grid">
+    <div class="process-step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Vous me contactez</div>
+      <div class="step-desc">Remplissez le formulaire avec le niveau, les matières en difficulté et vos disponibilités. Je réponds sous 24h.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.1s;">
+      <div class="step-num">02</div>
+      <div class="step-title">On cale un premier cours</div>
+      <div class="step-desc">Je me déplace chez vous. Le premier cours permet de cerner le niveau exact et d'identifier les vrais blocages.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.2s;">
+      <div class="step-num">03</div>
+      <div class="step-title">Le cours, chez vous</div>
+      <div class="step-desc">On travaille ensemble. Je ne donne pas les réponses — j'accompagne l'élève jusqu'à ce qu'il les trouve lui-même.</div>
+    </div>
+    <div class="process-step reveal" style="transition-delay:0.3s;">
+      <div class="step-num">04</div>
+      <div class="step-title">Compte-rendu parents</div>
+      <div class="step-desc">Après chaque cours : email récapitulatif, progrès notés, points à consolider avant la prochaine séance.</div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section class="reservation-section" id="reservation" style="padding:0;">
+  <div class="resa-left">
+    <div class="section-eyebrow" style="color:var(--gold);">Contact</div>
+    <h2 class="section-title light reveal">Prenons <em>contact</em><br>dès aujourd'hui.</h2>
+    <p class="section-body" style="color:rgba(255,255,255,0.45);margin-top:1rem;">Envoyez-moi un message avec le niveau de votre enfant et vos disponibilités. Je réponds sous 24h.</p>
+    <div style="margin-top:2.5rem;display:flex;flex-direction:column;gap:1.5rem;">
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Zone d'intervention</div>
+        <div style="font-size:0.88rem;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;">Paris 15e, 7e, 16e et arrondissements voisins<br><span style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Je me déplace directement chez vous</span></div>
+      </div>
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Crédit d'impôt</div>
+        <div style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.6;">50% remboursés. Le cours à 60€/h revient à <strong style="color:rgba(255,255,255,0.6);">30€/h réels</strong> après avantage fiscal.</div>
+      </div>
+      <div>
+        <div style="font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);font-family:var(--sans);margin-bottom:0.5rem;">Niveaux couverts</div>
+        <div style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.6;">De la 6ème à la Terminale · Spécialité Maths · Prépa scientifique</div>
+      </div>
+    </div>
+  </div>
+  <div class="resa-right">
+    <div class="resa-section-title">Votre demande</div>
+    <div class="form-group">
+      <label class="form-label">Prénom et nom de l'élève *</label>
+      <input type="text" class="form-input" id="student-name" placeholder="Ex : Léa Martin">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Classe *</label>
+        <select class="form-select" id="classe">
+          <option value="">—</option>
+          <option>6ème</option><option>5ème</option><option>4ème</option>
+          <option>3ème</option><option>2nde</option><option>1ère</option><option>Terminale</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Durée souhaitée</label>
+        <select class="form-select" id="formule">
+          <option value="">—</option>
+          <option>1h — 60 € (30 € après crédit impôt)</option>
+          <option>2h — 120 € (60 € après crédit impôt)</option>
+          <option>Cours réguliers (à définir)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email des parents *</label>
+      <input type="email" class="form-input" id="parent-email" placeholder="prenom.nom@email.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Téléphone (optionnel)</label>
+      <input type="tel" class="form-input" placeholder="06 XX XX XX XX">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Vos disponibilités & besoins</label>
+      <textarea class="form-input form-textarea" id="message" placeholder="Ex : Disponible le soir après 18h, difficultés en trigonométrie, Bac dans 2 mois…"></textarea>
+    </div>
+    <button class="form-submit" onclick="submitForm()">Envoyer ma demande →</button>
+    <div class="success-msg" id="success-msg">
+      <p>✦ Message envoyé ! Je vous réponds sous 24h pour fixer le premier cours. À très vite.</p>
+    </div>
+    <p style="font-size:0.65rem;color:rgba(255,255,255,0.2);line-height:1.6;margin-top:0.5rem;">Vos données sont utilisées uniquement pour organiser les cours. Aucun démarchage commercial.</p>
+  </div>
+</section>
+
+<!-- TEMOIGNAGES -->
+<section class="temoignages">
+  <div class="section-eyebrow">Témoignages</div>
+  <h2 class="section-title reveal">Ce que disent<br>les <em>familles</em>.</h2>
+  <div class="temo-grid reveal">
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">En deux mois, notre fils est passé de 11 à 15 en maths. Mais ce qui nous a le plus touché, c'est qu'il revenait du cours en ayant envie de travailler. Une première depuis le collège.</p>
+      <div class="temo-author">Isabelle D.</div>
+      <div class="temo-role">Mère d'un élève de Première — Paris 15e</div>
+    </div>
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">Le compte-rendu reçu après chaque cours est précieux. On sait exactement ce qui a été traité, ce qui pose encore problème. La transparence est totale, c'est rare.</p>
+      <div class="temo-author">Marc & Sophie L.</div>
+      <div class="temo-role">Parents d'une élève de Terminale — Paris 16e</div>
+    </div>
+    <div class="temo-card">
+      <div class="temo-stars">★★★★★</div>
+      <p class="temo-text">Notre fille utilisait ChatGPT pour tout. Depuis qu'elle travaille avec Bastien, elle comprend vraiment ce qu'elle fait. La différence aux contrôles a été immédiate.</p>
+      <div class="temo-author">Famille Schneider</div>
+      <div class="temo-role">Parents d'une élève de 2nde — Paris 15e</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Académie Thieulot</div>
+      <div class="footer-tagline">Cours particuliers de Mathématiques à domicile. Paris 15e et arrondissements voisins. L3 Maths, La Sorbonne.</div>
+      <div style="margin-top:1.5rem;display:flex;flex-direction:column;gap:0.4rem;">
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.3);">bastien.thieulot@academie-thieulot.fr</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.3);">Paris 15e</div>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Navigation</div>
+      <ul class="footer-links">
+        <li><a href="#accueil">Accueil</a></li>
+        <li><a href="#concept">Mon approche</a></li>
+        <li><a href="#offres">Tarifs</a></li>
+        <li><a href="#reservation">Contact</a></li>
+        <li><a onclick="showPage('about')">Qui suis-je ?</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Établissements proches</div>
+      <ul class="footer-links">
+        <li><a>Lycée Camille Sée</a></li>
+        <li><a>École Jeannine Manuel</a></li>
+        <li><a>Cité Scolaire Buffon</a></li>
+        <li><a>Lycée Blomet</a></li>
+        <li><a>Collège André Citroën</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Infos</div>
+      <ul class="footer-links">
+        <li><a>Crédit d'impôt 50%</a></li>
+        <li><a>Attestation fiscale</a></li>
+        <li><a>Politique d'annulation</a></li>
+        <li><a>Mentions légales</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Académie Thieulot — Bastien Thieulot</div>
+    <div class="footer-legal">
+      <a>Mentions légales</a>
+      <a>Confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page-main -->
+
+<!-- ══════════════ PAGE QUI SUIS-JE ══════════════ -->
+<div class="page" id="page-about">
+
+<!-- HERO ABOUT -->
+<section class="about-hero" style="padding:0;">
+  <div class="about-content">
+    <div class="hero-eyebrow">Paris · Sorbonne · Mathématiques</div>
+    <h1 style="font-family:var(--serif);font-size:4rem;font-weight:300;color:#fff;line-height:1.1;margin-bottom:1.5rem;">Bonjour,<br>je suis <em style="font-style:italic;color:var(--gold-light);">Bastien.</em></h1>
+    <p style="font-size:0.92rem;font-weight:300;color:rgba(255,255,255,0.5);line-height:1.85;max-width:420px;margin-bottom:2rem;">Étudiant en L3 Mathématiques à la Sorbonne, futur enseignant, passionné par le moment précis où un élève comprend enfin quelque chose qu'il ne comprenait pas.</p>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="#reservation" class="btn-primary" onclick="showPage('main')">Prendre contact →</a>
+      <a class="btn-ghost" onclick="showPage('main')">← Retour au site</a>
+    </div>
+  </div>
+  <div class="about-photo-side" style="position:relative;overflow:hidden;background:#0a0a08;">
+    <canvas id="about-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,var(--dark) 0%,transparent 50%);z-index:1;"></div>
+    <!-- Badges -->
+    <div class="about-float-card" style="top:3rem;right:2rem;z-index:3;">
+      <div class="afc-label">Formation</div>
+      <div class="afc-value">L3 Maths — Sorbonne</div>
+    </div>
+    <div class="about-float-card" style="bottom:3rem;right:2rem;z-index:3;">
+      <div class="afc-label">Expérience</div>
+      <div class="afc-value">4 ans d'enseignement</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT SECTIONS -->
+<section class="about-sections" style="padding:6rem 4rem;">
+
+  <!-- Citation -->
+  <div class="about-quote reveal">
+    <div class="aq-text">"Je veux être professeur de maths. Pas parce que c'est un métier stable — mais parce que j'aime trop le moment où quelqu'un comprend enfin quelque chose qui lui semblait impossible."</div>
+    <div class="aq-author">— Bastien Thieulot</div>
+  </div>
+
+  <!-- Blocs -->
+  <div class="about-grid reveal">
+    <div class="about-block">
+      <div class="about-block-icon">📍</div>
+      <div class="about-block-title">Ma vie à Paris</div>
+      <div class="about-block-text">Je vis dans un petit appartement parisien avec ma copine, elle aussi étudiante à la Sorbonne — en Géologie. On est deux à aimer les sciences, deux à aimer transmettre. Paris est chère, la vie d'étudiant n'est pas simple, et c'est précisément pour ça que j'ai créé l'Académie Thieulot : pour financer mes études en faisant ce que j'aime vraiment.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-block-icon">🎓</div>
+      <div class="about-block-title">La Sorbonne, mon terrain</div>
+      <div class="about-block-text">Étudier les Mathématiques à la Sorbonne, c'est apprendre à penser différemment. Rigueur, démonstration, abstraction — et surtout, apprendre à expliquer des choses complexes simplement. C'est là que j'ai compris que la pédagogie n'est pas un talent inné, c'est une méthode. Et cette méthode, je l'applique à chaque cours particulier.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-block-icon">📚</div>
+      <div class="about-block-title">4 ans sur le terrain</div>
+      <div class="about-block-text">Avant de créer l'Académie, j'ai passé deux ans dans une association d'aide aux devoirs à Saint-Pierre-du-Perray — un quartier populaire de banlieue. Puis deux ans de cours particuliers intensifs. J'ai appris à gérer tous les profils : les élèves découragés, ceux qui s'ennuient, ceux qui ont des lacunes depuis la 6ème. Rien ne me surprend vraiment.</div>
+    </div>
+    <div class="about-block">
+      <div class="about-block-icon">⚠️</div>
+      <div class="about-block-title">Le problème de l'IA</div>
+      <div class="about-block-text">J'ai vu la tendance exploser. Des élèves qui prennent une photo de leur exercice, l'envoient à ChatGPT, recopient la réponse et "ont fait leurs devoirs". En apparence, tout va bien. En contrôle, la catastrophe. Mon travail, c'est précisément de recréer la friction productive que l'IA supprime — celle qui force vraiment à comprendre.</div>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div style="max-width:640px;margin:4rem auto 0;">
+    <div class="section-eyebrow" style="justify-content:flex-start;">Mon parcours</div>
+    <div class="timeline reveal">
+      <div class="tl-item">
+        <div class="tl-year">2019</div>
+        <div class="tl-content">
+          <div class="tl-title">Bac Scientifique — mention Bien</div>
+          <div class="tl-desc">Lycée en région parisienne. Déjà fasciné par les Maths, convaincu que la façon dont on enseigne fait toute la différence.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-content">
+          <div class="tl-title">Début de l'aide aux devoirs — Association SPP</div>
+          <div class="tl-desc">2 ans à Saint-Pierre-du-Perray. Gestion de groupes d'élèves, tous niveaux, toutes matières. Première vraie école de pédagogie.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2023</div>
+        <div class="tl-content">
+          <div class="tl-title">L3 Mathématiques — Sorbonne</div>
+          <div class="tl-desc">Entrée à la Sorbonne. Niveau exigeant, méthode rigoureuse. Début des cours particuliers intensifs en banlieue parisienne en parallèle.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-content">
+          <div class="tl-title">Création de l'Académie Thieulot</div>
+          <div class="tl-desc">Lancement des cours particuliers à domicile, Paris 15e. L'objectif : proposer un accompagnement sérieux, transparent, et vraiment efficace.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA bas -->
+  <div style="text-align:center;margin-top:4rem;">
+    <p style="font-size:0.92rem;color:var(--text-muted);margin-bottom:1.5rem;font-weight:300;">Vous voulez qu'on travaille ensemble ?</p>
+    <a href="#reservation" class="btn-primary" onclick="showPage('main')" style="display:inline-block;">Prendre contact →</a>
+  </div>
+</section>
+
+<!-- FOOTER about -->
+<footer>
+  <div class="footer-bottom" style="padding-top:0;border-top:none;">
+    <div class="footer-copy">© 2025 Académie Thieulot — Bastien Thieulot</div>
+    <a class="btn-ghost" onclick="showPage('main')" style="font-size:0.7rem;">← Retour au site principal</a>
+  </div>
+</footer>
+
+</div><!-- /page-about -->
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script>
+// Navigation entre pages
+function showPage(name) {
+  document.getElementById('page-main').classList.remove('active');
+  document.getElementById('page-about').classList.remove('active');
+  document.getElementById('page-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+  setTimeout(initReveal, 100);
+}
+
+// Formulaire
+function submitForm() {
+  const name  = document.getElementById('student-name').value.trim();
+  const email = document.getElementById('parent-email').value.trim();
+  const classe = document.getElementById('classe').value;
+  if (!name || !email || !classe) {
+    alert('Merci de remplir le nom de l\'élève, sa classe et votre email.');
+    return;
+  }
+  document.getElementById('success-msg').classList.add('show');
+}
+
+// Scroll reveal
+function initReveal() {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => { el.classList.remove('visible'); obs.observe(el); });
+}
+initReveal();
+
+// ── SHADER WebGL (concept + about) ──
+function initShader(canvasId) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  const gl = canvas.getContext('webgl2');
+  if (!gl) return;
+
+  const resize = () => {
+    canvas.width  = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+  };
+  resize();
+  window.addEventListener('resize', resize);
+
+  const vs = gl.createShader(gl.VERTEX_SHADER);
+  gl.shaderSource(vs, `#version 300 es
+    in vec4 position;
+    void main(){ gl_Position = position; }`);
+  gl.compileShader(vs);
+
+  const fs = gl.createShader(gl.FRAGMENT_SHADER);
+  gl.shaderSource(fs, `#version 300 es
+    precision highp float;
+    out vec4 O;
+    uniform vec2 resolution;
+    uniform float time;
+    #define FC gl_FragCoord.xy
+    #define T time
+    #define R resolution
+    #define MN min(R.x,R.y)
+    float rnd(vec2 p){p=fract(p*vec2(12.9898,78.233));p+=dot(p,p+34.56);return fract(p.x*p.y);}
+    float noise(in vec2 p){vec2 i=floor(p),f=fract(p),u=f*f*(3.-2.*f);float a=rnd(i),b=rnd(i+vec2(1,0)),c=rnd(i+vec2(0,1)),d=rnd(i+1.);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
+    float fbm(vec2 p){float t=.0,a=1.;mat2 m=mat2(1.,-.5,.2,1.2);for(int i=0;i<5;i++){t+=a*noise(p);p*=2.*m;a*=.5;}return t;}
+    float clouds(vec2 p){float d=1.,t=.0;for(float i=.0;i<3.;i++){float a=d*fbm(i*10.+p.x*.2+.2*(1.+i)*p.y+d+i*i+p);t=mix(t,d,a);d=a;p*=2./(i+1.);}return t;}
+    void main(void){
+      vec2 uv=(FC-.5*R)/MN,st=uv*vec2(2,1);
+      vec3 col=vec3(0);
+      float bg=clouds(vec2(st.x+T*.5,-st.y));
+      uv*=1.-.3*(sin(T*.2)*.5+.5);
+      for(float i=1.;i<12.;i++){
+        uv+=.1*cos(i*vec2(.1+.01*i,.8)+i*i+T*.5+.1*uv.x);
+        vec2 p=uv;
+        float d=length(p);
+        col+=.00125/d*(cos(sin(i)*vec3(1,2,3))+1.);
+        float b=noise(i+p+bg*1.731);
+        col+=.002*b/length(max(p,vec2(b*p.x*.02,p.y)));
+        col=mix(col,vec3(bg*.25,bg*.137,bg*.05),d);
+      }
+      O=vec4(col,1);
+    }`);
+  gl.compileShader(fs);
+
+  const prog = gl.createProgram();
+  gl.attachShader(prog, vs);
+  gl.attachShader(prog, fs);
+  gl.linkProgram(prog);
+
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,-1,-1,1,1,1,-1]), gl.STATIC_DRAW);
+
+  const pos = gl.getAttribLocation(prog, 'position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+  const uRes  = gl.getUniformLocation(prog, 'resolution');
+  const uTime = gl.getUniformLocation(prog, 'time');
+
+  function loop(now) {
+    gl.useProgram(prog);
+    gl.uniform2f(uRes, canvas.width, canvas.height);
+    gl.uniform1f(uTime, now * 1e-3);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
+// Init les deux canvas au chargement
+initShader('concept-canvas');
+initShader('about-canvas');
+</script>
+</body>
+</html>
